@@ -147,7 +147,7 @@ const HomePage = () => {
             </p>
             <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(201,168,76,0.12)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--dark3)', border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--gold)', flexShrink: 0 }}>
-                AR
+                Aryan Rathi
               </div>
               <div>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '.95rem', color: 'var(--cream)' }}>Aryan Rathi</div>

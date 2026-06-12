@@ -1,6 +1,8 @@
 package com.astrotalk.dto;
 
+import com.astrotalk.config.LocalTimeDeserializer;
 import com.astrotalk.entity.Gender;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,6 +29,7 @@ public class RegisterRequest {
 
     private LocalDate dateOfBirth;
 
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime timeOfBirth;
 
     private String placeOfBirth;
