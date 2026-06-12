@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Toaster } from 'react-hot-toast'
 import { store } from './store'
+import { LanguageProvider } from './context/LanguageContext'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Sidebar from './components/layout/Sidebar'
@@ -29,8 +31,10 @@ import AdminUsersPage from './pages/admin/AdminUsersPage'
 import AdminAstrologersPage from './pages/admin/AdminAstrologersPage'
 import AdminRevenuePage from './pages/admin/AdminRevenuePage'
 
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id.apps.googleusercontent.com'
+
 const PublicLayout = () => (
-  <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+  <div className="min-h-screen flex flex-col bg-gray-950 text-gray-100">
     <Navbar />
     <main className="flex-1">
       <Outlet />
@@ -40,7 +44,7 @@ const PublicLayout = () => (
 )
 
 const DashboardLayout = () => (
-  <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
+  <div className="min-h-screen flex flex-col bg-gray-950">
     <Navbar />
     <div className="flex-1 flex max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 gap-8">
       <Sidebar />
@@ -52,7 +56,7 @@ const DashboardLayout = () => (
 )
 
 const ConsultationLayout = () => (
-  <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
+  <div className="min-h-screen flex flex-col bg-gray-950">
     <Navbar />
     <main className="flex-1">
       <Outlet />
@@ -62,55 +66,65 @@ const ConsultationLayout = () => (
 
 function App() {
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              borderRadius: '12px',
-              background: '#333',
-              color: '#fff',
-              fontSize: '14px',
-            },
-          }}
-        />
-        <Routes>
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/astrologers" element={<AstrologerListPage />} />
-            <Route path="/astrologers/:id" element={<AstrologerProfilePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-          </Route>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <Provider store={store}>
+        <LanguageProvider>
+          <BrowserRouter>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  borderRadius: '12px',
+                  background: '#1f1f1f',
+                  color: '#fff',
+                  fontSize: '14px',
+                },
+                success: {
+                  style: { background: '#065f46' },
+                },
+                error: {
+                  style: { background: '#991b1b' },
+                },
+              }}
+            />
+            <Routes>
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/astrologers" element={<AstrologerListPage />} />
+                <Route path="/astrologers/:id" element={<AstrologerProfilePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+              </Route>
 
-          <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/wallet" element={<WalletPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Route>
+              <Route element={<ProtectedRoute><RoleRoute allowedRoles={['USER']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/wallet" element={<WalletPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+              </Route>
 
-          <Route element={<ProtectedRoute><ConsultationLayout /></ProtectedRoute>}>
-            <Route path="/consultation/:id" element={<ConsultationPage />} />
-          </Route>
+              <Route element={<ProtectedRoute><ConsultationLayout /></ProtectedRoute>}>
+                <Route path="/consultation/:id" element={<ConsultationPage />} />
+              </Route>
 
-          <Route element={<ProtectedRoute><RoleRoute allowedRoles={['astro']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
-            <Route path="/astrologer/dashboard" element={<AstrologerDashboardPage />} />
-            <Route path="/astrologer/profile" element={<AstrologerProfileEditPage />} />
-            <Route path="/astrologer/earnings" element={<EarningsPage />} />
-          </Route>
+              <Route element={<ProtectedRoute><RoleRoute allowedRoles={['ASTROLOGER']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
+                <Route path="/astrologer/dashboard" element={<AstrologerDashboardPage />} />
+                <Route path="/astrologer/profile" element={<AstrologerProfileEditPage />} />
+                <Route path="/astrologer/earnings" element={<EarningsPage />} />
+              </Route>
 
-          <Route element={<ProtectedRoute><RoleRoute allowedRoles={['admin']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
-            <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-            <Route path="/admin/users" element={<AdminUsersPage />} />
-            <Route path="/admin/astrologers" element={<AdminAstrologersPage />} />
-            <Route path="/admin/revenue" element={<AdminRevenuePage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+              <Route element={<ProtectedRoute><RoleRoute allowedRoles={['ADMIN']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
+                <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+                <Route path="/admin/users" element={<AdminUsersPage />} />
+                <Route path="/admin/astrologers" element={<AdminAstrologersPage />} />
+                <Route path="/admin/revenue" element={<AdminRevenuePage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </LanguageProvider>
+      </Provider>
+    </GoogleOAuthProvider>
   )
 }
 

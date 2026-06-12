@@ -1,17 +1,23 @@
-const statusStyles = {
-  online: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  offline: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
-  busy: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-  pending: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-  verified: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-}
-
 const Badge = ({ status, children }) => {
-  const style = statusStyles[status] || statusStyles.offline
+  const colors = {
+    online: { bg: 'rgba(201,168,76,0.15)', text: 'var(--gold)', dot: 'var(--gold)' },
+    offline: { bg: 'rgba(255,255,255,0.05)', text: 'var(--muted)', dot: 'var(--muted)' },
+    busy: { bg: 'rgba(226,75,74,0.15)', text: '#E24B4A', dot: '#E24B4A' },
+    verified: { bg: 'rgba(201,168,76,0.15)', text: 'var(--gold)', dot: 'var(--gold)' },
+  }
+  const c = colors[status] || colors.offline
 
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${style}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${status === 'online' ? 'bg-green-500 animate-pulse' : status === 'busy' ? 'bg-red-500' : 'bg-current'}`} />
+    <span
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: '4px',
+        padding: '2px 8px', borderRadius: '999px',
+        fontSize: '.6rem', fontWeight: 500, letterSpacing: '.1em',
+        textTransform: 'uppercase',
+        background: c.bg, color: c.text,
+      }}
+    >
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: c.dot, flexShrink: 0 }} />
       {children || status}
     </span>
   )

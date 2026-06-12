@@ -44,3 +44,6 @@ app:
   platform-commission: 0.30
   astrologer-share: 0.70
   low-balance-threshold: 10
+
+google:
+  client-id: ${GOOGLE_CLIENT_ID:your-google-client-id.apps.googleusercontent.com}

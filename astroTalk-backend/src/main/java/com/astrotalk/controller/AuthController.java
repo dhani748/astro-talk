@@ -2,6 +2,7 @@ package com.astrotalk.controller;
 
 import com.astrotalk.dto.*;
 import com.astrotalk.service.AuthService;
+import com.astrotalk.service.GoogleAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final GoogleAuthService googleAuthService;
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Creates a user account and returns JWT token with signup bonus")
@@ -33,5 +35,11 @@ public class AuthController {
     @Operation(summary = "Login", description = "Authenticates user/astrologer and returns JWT token")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/google")
+    @Operation(summary = "Google Sign-In", description = "Authenticates via Google ID token")
+    public ResponseEntity<AuthResponse> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
+        return ResponseEntity.ok(googleAuthService.authenticate(request));
     }
 }

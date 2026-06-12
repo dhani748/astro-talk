@@ -14,3 +14,6 @@ export const getCurrentUser = () =>
 
 export const updateProfile = (data) =>
   axiosInstance.put('/auth/profile', data)
+
+export const googleLogin = (idToken) =>
+  axiosInstance.post('/auth/google', { idToken })

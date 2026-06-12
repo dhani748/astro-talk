@@ -24,7 +24,7 @@ const adminLinks = [
 
 const Sidebar = () => {
   const { role } = useSelector((state) => state.auth)
-  const links = role === 'astro' ? astrologerLinks : role === 'admin' ? adminLinks : userLinks
+  const links = role === 'ASTROLOGER' ? astrologerLinks : role === 'ADMIN' ? adminLinks : userLinks
 
   return (
     <aside className="w-64 flex-shrink-0 hidden lg:block">

@@ -4,43 +4,46 @@ import Badge from '../common/Badge'
 
 const AstrologerCard = ({ astrologer }) => {
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-300">
+    <div className="astro-card rounded-2xl p-6 transition-all duration-300">
       <div className="flex items-start gap-4">
         <div className="relative flex-shrink-0">
           <img
-            src={astrologer.profilePhoto || `https://ui-avatars.com/api/?name=${astrologer.name}&background=6B21A8&color=fff&size=80`}
+            src={astrologer.profilePhoto || `https://ui-avatars.com/api/?name=${astrologer.name}&background=2A241C&color=C9A84C&size=80`}
             alt={astrologer.name}
             className="w-20 h-20 rounded-xl object-cover"
+            style={{ border: '1px solid rgba(201,168,76,0.15)' }}
           />
           <div className="absolute -top-1 -right-1">
             <Badge status={astrologer.online ? 'online' : 'offline'} />
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <Link to={`/astrologers/${astrologer.id}`} className="hover:text-primary transition-colors">
-            <h3 className="font-semibold text-gray-900 dark:text-white text-lg truncate">{astrologer.name}</h3>
+          <Link to={`/astrologers/${astrologer.id}`} className="transition-colors">
+            <h3 className="font-semibold" style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--cream)' }}>{astrologer.name}</h3>
           </Link>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{astrologer.specialization}</p>
+          <p style={{ fontSize: '.85rem', color: 'var(--muted)', marginTop: 2 }}>{astrologer.specialization}</p>
           <div className="flex items-center gap-1 mt-1">
-            <FiStar className="text-gold fill-gold" />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{astrologer.rating?.toFixed(1) || '5.0'}</span>
-            <span className="text-xs text-gray-400">({astrologer.reviewCount || 0})</span>
+            <FiStar style={{ color: 'var(--gold)', fill: 'var(--gold)' }} size={14} />
+            <span style={{ fontSize: '.9rem', fontWeight: 500, color: 'var(--light)' }}>{astrologer.rating?.toFixed(1) || '5.0'}</span>
+            <span style={{ fontSize: '.75rem', color: 'var(--muted)' }}>({astrologer.reviewCount || 0})</span>
           </div>
           <div className="flex items-center gap-2 mt-3">
-            <span className="text-primary font-semibold">₹{astrologer.pricePerMin || 10}/min</span>
+            <span style={{ color: 'var(--gold)', fontWeight: 600, fontSize: '.95rem' }}>₹{astrologer.pricePerMin || 10}/min</span>
           </div>
           <div className="flex gap-2 mt-3">
             <Link
               to={`/consultation/${astrologer.id}?type=chat`}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors"
+              className="btn-ghost !text-[.55rem] !px-3 !py-1.5 !inline-flex !items-center !gap-1"
+              style={{ fontSize: '.6rem', padding: '.4rem .8rem' }}
             >
-              <FiMessageCircle size={14} /> Chat
+              <FiMessageCircle size={12} /> Chat
             </Link>
             <Link
               to={`/consultation/${astrologer.id}?type=call`}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gold/10 text-gold-dark rounded-lg text-sm font-medium hover:bg-gold/20 transition-colors"
+              className="btn-gold !text-[.55rem] !px-3 !py-1.5 !inline-flex !items-center !gap-1"
+              style={{ fontSize: '.6rem', padding: '.4rem .8rem' }}
             >
-              <FiPhone size={14} /> Call
+              <FiPhone size={12} /> Call
             </Link>
           </div>
         </div>
