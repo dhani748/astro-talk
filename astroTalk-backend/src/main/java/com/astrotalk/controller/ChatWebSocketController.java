@@ -47,18 +47,18 @@ public class ChatWebSocketController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null) {
-            handleSend(request, user.getUserId(), SenderRole.USER);
+            handleSend(request, user.getId(), SenderRole.USER);
             return;
         }
 
         Astrologer astrologer = astrologerRepository.findByEmail(email)
                 .orElse(null);
         if (astrologer != null) {
-            handleSend(request, String.valueOf(astrologer.getId()), SenderRole.ASTROLOGER);
+            handleSend(request, astrologer.getId(), SenderRole.ASTROLOGER);
         }
     }
 
-    private void handleSend(MessageRequestModel request, String senderId, SenderRole senderRole) {
+    private void handleSend(MessageRequestModel request, Long senderId, SenderRole senderRole) {
         MessageResponseModel response = chatService.sendMessage(
                 request.getConsultationId(),
                 senderId,
@@ -110,13 +110,12 @@ public class ChatWebSocketController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null) {
-            indicator.setSenderId(user.getUserId());
+            indicator.setSenderId(user.getId());
             indicator.setSenderRole(SenderRole.USER);
         } else {
             Astrologer astrologer = astrologerRepository.findByEmail(email).orElse(null);
             if (astrologer == null) return;
-            indicator.setSenderId(String.valueOf(astrologer.getId()));
-            indicator.setSenderRole(SenderRole.ASTROLOGER);
+            indicator.setSenderId(astrologer.getId());
             indicator.setSenderRole(SenderRole.ASTROLOGER);
         }
 

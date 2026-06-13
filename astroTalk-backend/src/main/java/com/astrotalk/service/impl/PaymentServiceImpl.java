@@ -1,9 +1,9 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.PaymentVerifyRequest;
-import com.astrotalk.dto.RazorpayOrderRequest;
-import com.astrotalk.dto.RazorpayOrderResponse;
-import com.astrotalk.dto.WalletResponse;
+import com.astrotalk.model.PaymentVerifyRequestModel;
+import com.astrotalk.model.RazorpayOrderRequestModel;
+import com.astrotalk.model.RazorpayOrderResponseModel;
+import com.astrotalk.model.WalletResponseModel;
 import com.astrotalk.exception.ResourceNotFoundException;
 import com.astrotalk.repository.UserRepository;
 import com.astrotalk.service.PaymentService;
@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     private String keySecret;
 
     @Override
-    public RazorpayOrderResponse createOrder(RazorpayOrderRequest request, String email) {
+    public RazorpayOrderResponseModel createOrder(RazorpayOrderRequestModel request, String email) {
         try {
             JSONObject orderRequest = new JSONObject();
             int amountInPaise = request.getAmount().multiply(BigDecimal.valueOf(100)).intValue();
@@ -48,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             Order order = razorpayClient.orders.create(orderRequest);
 
-            return RazorpayOrderResponse.builder()
+            return RazorpayOrderResponseModel.builder()
                     .orderId(order.get("id"))
                     .amount(request.getAmount())
                     .currency("INR")
@@ -62,7 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public WalletResponse verifyPayment(PaymentVerifyRequest request, String email) {
+    public WalletResponseModel verifyPayment(PaymentVerifyRequestModel request, String email) {
         String generatedSignature = generateSignature(
                 request.getRazorpayOrderId() + "|" + request.getRazorpayPaymentId());
 

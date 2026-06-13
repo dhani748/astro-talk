@@ -1,7 +1,7 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.ConsultationResponse;
-import com.astrotalk.dto.StartConsultationRequest;
+import com.astrotalk.model.ConsultationResponseModel;
+import com.astrotalk.model.StartConsultationRequestModel;
 import com.astrotalk.entity.*;
 import com.astrotalk.exception.InsufficientBalanceException;
 import com.astrotalk.exception.ResourceNotFoundException;
@@ -31,7 +31,7 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     @Override
     @Transactional
-    public ConsultationResponse startConsultation(Long userId, StartConsultationRequest request) {
+    public ConsultationResponseModel startConsultation(Long userId, StartConsultationRequestModel request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
@@ -74,7 +74,7 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     @Override
     @Transactional
-    public ConsultationResponse endConsultation(Long consultationId) {
+    public ConsultationResponseModel endConsultation(Long consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Consultation", consultationId));
 
@@ -120,7 +120,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
-    public ConsultationResponse getActiveConsultation(Long userId) {
+    public ConsultationResponseModel getActiveConsultation(Long userId) {
         Consultation consultation = consultationRepository
                 .findByUserIdAndStatus(userId, ConsultationStatus.ACTIVE)
                 .orElseThrow(() -> new ResourceNotFoundException("Active consultation not found"));
@@ -129,13 +129,20 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
-    public Page<ConsultationResponse> getConsultationHistory(Long userId, Pageable pageable) {
+    public Page<ConsultationResponseModel> getConsultationHistory(Long userId, Pageable pageable) {
         return consultationRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
                 .map(this::toConsultationResponse);
     }
 
-    private ConsultationResponse toConsultationResponse(Consultation c) {
-        return ConsultationResponse.builder()
+    @Override
+    public ConsultationResponseModel getConsultationById(Long id) {
+        Consultation consultation = consultationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Consultation", id));
+        return toConsultationResponse(consultation);
+    }
+
+    private ConsultationResponseModel toConsultationResponse(Consultation c) {
+        return ConsultationResponseModel.builder()
                 .id(c.getId())
                 .userId(c.getUser().getId())
                 .userName(c.getUser().getName())

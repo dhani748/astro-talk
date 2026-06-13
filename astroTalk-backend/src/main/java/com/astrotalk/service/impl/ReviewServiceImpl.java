@@ -1,7 +1,7 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.ReviewRequest;
-import com.astrotalk.dto.ReviewResponse;
+import com.astrotalk.model.ReviewRequestModel;
+import com.astrotalk.model.ReviewResponseModel;
 import com.astrotalk.entity.*;
 import com.astrotalk.exception.ResourceNotFoundException;
 import com.astrotalk.repository.*;
@@ -23,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewResponse submitReview(Long userId, ReviewRequest request) {
+    public ReviewResponseModel submitReview(Long userId, ReviewRequestModel request) {
         Consultation consultation = consultationRepository.findById(request.getConsultationId())
                 .orElseThrow(() -> new ResourceNotFoundException("Consultation", request.getConsultationId()));
 
@@ -58,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewResponse> getAstrologerReviews(Long astrologerId, Pageable pageable) {
+    public Page<ReviewResponseModel> getAstrologerReviews(Long astrologerId, Pageable pageable) {
         return reviewRepository.findByAstrologerIdOrderByCreatedAtDesc(astrologerId, pageable)
                 .map(this::toReviewResponse);
     }
@@ -71,8 +71,8 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.deleteById(reviewId);
     }
 
-    private ReviewResponse toReviewResponse(Review review) {
-        return ReviewResponse.builder()
+    private ReviewResponseModel toReviewResponse(Review review) {
+        return ReviewResponseModel.builder()
                 .id(review.getId())
                 .userId(review.getUser().getId())
                 .userName(review.getUser().getName())

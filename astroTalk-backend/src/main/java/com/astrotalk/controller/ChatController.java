@@ -44,7 +44,7 @@ public class ChatController {
      * @param consultationId the consultation ID
      * @param page           zero-based page index (default 0)
      * @param size           page size (default 20)
-     * @return {@link ChatHistoryResponseModel} with messages and pagination metadata
+     * @return {@link ChatHistoryResponse} with messages and pagination metadata
      */
     @GetMapping(WebResource.MESSAGES)
     @Operation(summary = "Get chat messages", description = "Returns paginated message history for a consultation")

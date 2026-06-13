@@ -1,6 +1,6 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.*;
+import com.astrotalk.model.*;
 import com.astrotalk.entity.*;
 import com.astrotalk.exception.ResourceNotFoundException;
 import com.astrotalk.repository.*;
@@ -29,7 +29,7 @@ public class AdminServiceImpl implements AdminService {
     private final NotificationService notificationService;
 
     @Override
-    public Page<UserResponse> getAllUsers(Pageable pageable, String search) {
+    public Page<UserResponseModel> getAllUsers(Pageable pageable, String search) {
         if (search != null && !search.isBlank()) {
             return userRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, pageable)
                     .map(this::toUserResponse);
@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<AstrologerResponse> getAllAstrologers(Pageable pageable, String status) {
+    public Page<AstrologerResponseModel> getAllAstrologers(Pageable pageable, String status) {
         if (status != null && !status.isBlank()) {
             return astrologerRepository.findByStatus(AstrologerStatus.valueOf(status.toUpperCase()), pageable)
                     .map(this::toAstrologerResponse);
@@ -48,7 +48,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public AstrologerResponse verifyAstrologer(Long astrologerId) {
+    public AstrologerResponseModel verifyAstrologer(Long astrologerId) {
         Astrologer astrologer = astrologerRepository.findById(astrologerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Astrologer", astrologerId));
         astrologer.setVerified(true);
@@ -64,7 +64,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public AstrologerResponse rejectAstrologer(Long astrologerId, String reason) {
+    public AstrologerResponseModel rejectAstrologer(Long astrologerId, String reason) {
         if (!astrologerRepository.existsById(astrologerId)) {
             throw new ResourceNotFoundException("Astrologer", astrologerId);
         }
@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public DashboardStatsDTO getDashboardStats() {
+    public DashboardStatsModel getDashboardStats() {
         long totalUsers = userRepository.count();
         long totalAstrologers = astrologerRepository.count();
         long activeConsultations = consultationRepository.countByStatus(ConsultationStatus.ACTIVE);
@@ -88,7 +88,7 @@ public class AdminServiceImpl implements AdminService {
         BigDecimal todayRevenue = consultationRepository.getRevenueBetween(todayStart, todayEnd);
         long newUsersToday = userRepository.countByCreatedAtAfter(todayStart);
 
-        return DashboardStatsDTO.builder()
+        return DashboardStatsModel.builder()
                 .totalUsers(totalUsers)
                 .totalAstrologers(totalAstrologers)
                 .activeConsultations(activeConsultations)
@@ -99,14 +99,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public RevenueReportDTO getRevenueReport(LocalDate startDate, LocalDate endDate) {
+    public RevenueReportModel getRevenueReport(LocalDate startDate, LocalDate endDate) {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.atTime(LocalTime.MAX);
 
         BigDecimal revenue = consultationRepository.getRevenueBetween(start, end);
         long count = consultationRepository.countByCreatedAtAfter(start);
 
-        return RevenueReportDTO.builder()
+        return RevenueReportModel.builder()
                 .startDate(startDate)
                 .endDate(endDate)
                 .totalRevenue(revenue)
@@ -116,7 +116,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public WalletResponse adjustWallet(WalletAdjustRequest request) {
+    public WalletResponseModel adjustWallet(WalletAdjustRequestModel request) {
         if (request.isCredit()) {
             return walletService.addBalance(request.getUserId(), request.getAmount(),
                     "Admin credit: " + request.getReason());
@@ -126,8 +126,8 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    private UserResponse toUserResponse(User user) {
-        return UserResponse.builder()
+    private UserResponseModel toUserResponse(User user) {
+        return UserResponseModel.builder()
                 .id(user.getId()).name(user.getName()).email(user.getEmail())
                 .phone(user.getPhone()).dateOfBirth(user.getDateOfBirth())
                 .timeOfBirth(user.getTimeOfBirth()).placeOfBirth(user.getPlaceOfBirth())
@@ -138,8 +138,8 @@ public class AdminServiceImpl implements AdminService {
                 .updatedAt(user.getUpdatedAt()).build();
     }
 
-    private AstrologerResponse toAstrologerResponse(Astrologer a) {
-        return AstrologerResponse.builder()
+    private AstrologerResponseModel toAstrologerResponse(Astrologer a) {
+        return AstrologerResponseModel.builder()
                 .id(a.getId()).name(a.getName()).email(a.getEmail()).phone(a.getPhone())
                 .profilePicture(a.getProfilePicture()).bio(a.getBio())
                 .specialization(a.getSpecialization()).yearsOfExperience(a.getYearsOfExperience())

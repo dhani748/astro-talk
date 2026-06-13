@@ -1,8 +1,8 @@
 package com.astrotalk.service;
 
-import com.astrotalk.dto.AuthResponse;
-import com.astrotalk.dto.GoogleLoginRequest;
+import com.astrotalk.model.AuthResponseModel;
+import com.astrotalk.model.GoogleLoginRequestModel;
 
 public interface GoogleAuthService {
-    AuthResponse authenticate(GoogleLoginRequest request);
+    AuthResponseModel authenticate(GoogleLoginRequestModel request);
 }

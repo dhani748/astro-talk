@@ -103,11 +103,11 @@ public class UserDAO {
      * @param user the user entity to delete
      */
     public void delete(User user) {
-        log.debug("Deleting user: {}", user.getUserId());
+        log.debug("Deleting user: {}", user.getId());
         try {
             userRepository.delete(user);
         } catch (Exception e) {
-            log.error("Error deleting user: {}", user.getUserId(), e);
+            log.error("Error deleting user: {}", user.getId(), e);
             throw e;
         }
     }

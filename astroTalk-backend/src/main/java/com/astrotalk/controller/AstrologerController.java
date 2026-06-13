@@ -55,7 +55,7 @@ public class AstrologerController {
      * @param sortDir        sort direction "asc" or "desc" (default "desc")
      * @param page           zero-based page index (default 0)
      * @param size           page size (default 20)
-     * @return paginated {@link AstrologerResponseModel} list
+     * @return paginated {@link AstrologerResponse} list
      */
     @GetMapping
     @Operation(summary = "Search astrologers", description = "Search/filter astrologers by specialization, language, price, rating, and online status")
@@ -82,7 +82,7 @@ public class AstrologerController {
     /**
      * GET /astrologers/top - Returns the top 6 astrologers sorted by rating.
      *
-     * @return list of top-rated {@link AstrologerResponseModel}
+     * @return list of top-rated {@link AstrologerResponse}
      */
     @GetMapping(WebResource.TOP)
     @Operation(summary = "Get top astrologers", description = "Returns top 6 astrologers by rating")
@@ -94,7 +94,7 @@ public class AstrologerController {
      * GET /astrologers/{id} - Returns the full profile of a specific astrologer.
      *
      * @param id the astrologer's ID
-     * @return the {@link AstrologerResponseModel} with all profile details
+     * @return the {@link AstrologerResponse} with all profile details
      */
     @GetMapping(WebResource.ASTROLOGER_DETAIL)
     @Operation(summary = "Get astrologer profile", description = "Returns full profile of an astrologer")
@@ -112,7 +112,7 @@ public class AstrologerController {
     @Operation(summary = "Check astrologer availability", description = "Returns whether astrologer is currently online")
     public ResponseEntity<Boolean> getAvailability(@PathVariable Long id) {
         Astrologer astrologer = astrologerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Astrologer", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Astrologer", "id", String.valueOf(id)));
         return ResponseEntity.ok(astrologer.getStatus() != null
                 && astrologer.getStatus().name().equals("ONLINE"));
     }
@@ -122,7 +122,7 @@ public class AstrologerController {
      *
      * @param authentication the current authenticated principal
      * @param request        the profile fields to update
-     * @return the updated {@link AstrologerResponseModel}
+     * @return the updated {@link AstrologerResponse}
      */
     @PutMapping(WebResource.ASTRologer_PROFILE)
     @Operation(summary = "Update astrologer profile", description = "Updates the authenticated astrologer's profile")

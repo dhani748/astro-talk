@@ -1,6 +1,6 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.WalletResponse;
+import com.astrotalk.model.WalletResponseModel;
 import com.astrotalk.entity.User;
 import com.astrotalk.entity.WalletTransaction;
 import com.astrotalk.entity.WalletTransactionType;
@@ -26,7 +26,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public WalletResponse addBalance(Long userId, BigDecimal amount, String description) {
+    public WalletResponseModel addBalance(Long userId, BigDecimal amount, String description) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
@@ -40,7 +40,7 @@ public class WalletServiceImpl implements WalletService {
                 .description(description)
                 .build());
 
-        return WalletResponse.builder()
+        return WalletResponseModel.builder()
                 .userId(user.getId())
                 .balance(user.getWalletBalance())
                 .build();
@@ -48,7 +48,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     @Transactional
-    public WalletResponse deductBalance(Long userId, BigDecimal amount, String description) {
+    public WalletResponseModel deductBalance(Long userId, BigDecimal amount, String description) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
@@ -67,18 +67,18 @@ public class WalletServiceImpl implements WalletService {
                 .description(description)
                 .build());
 
-        return WalletResponse.builder()
+        return WalletResponseModel.builder()
                 .userId(user.getId())
                 .balance(user.getWalletBalance())
                 .build();
     }
 
     @Override
-    public WalletResponse getBalance(Long userId) {
+    public WalletResponseModel getBalance(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
-        return WalletResponse.builder()
+        return WalletResponseModel.builder()
                 .userId(user.getId())
                 .balance(user.getWalletBalance())
                 .build();

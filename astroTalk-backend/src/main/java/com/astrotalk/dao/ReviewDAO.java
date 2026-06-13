@@ -76,10 +76,10 @@ public class ReviewDAO {
      * @param consultationId the consultation ID
      * @return true if a review exists
      */
-    public boolean existsByUserIdAndConsultationId(String userId, Long consultationId) {
+    public boolean existsByUserIdAndConsultationId(Long userId, Long consultationId) {
         log.debug("Checking if review exists by userId: {} and consultationId: {}", userId, consultationId);
         try {
-            return reviewRepository.existsByUserUserIdAndConsultationId(userId, consultationId);
+            return reviewRepository.existsByUserIdAndConsultationId(userId, consultationId);
         } catch (Exception e) {
             log.error("Error checking review existence by user id: {} and consultation id: {}", userId, consultationId, e);
             throw e;

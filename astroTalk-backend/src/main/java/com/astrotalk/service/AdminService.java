@@ -1,6 +1,6 @@
 package com.astrotalk.service;
 
-import com.astrotalk.dto.*;
+import com.astrotalk.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,17 +8,17 @@ import java.time.LocalDate;
 
 public interface AdminService {
 
-    Page<UserResponse> getAllUsers(Pageable pageable, String search);
+    Page<UserResponseModel> getAllUsers(Pageable pageable, String search);
 
-    Page<AstrologerResponse> getAllAstrologers(Pageable pageable, String status);
+    Page<AstrologerResponseModel> getAllAstrologers(Pageable pageable, String status);
 
-    AstrologerResponse verifyAstrologer(Long astrologerId);
+    AstrologerResponseModel verifyAstrologer(Long astrologerId);
 
-    AstrologerResponse rejectAstrologer(Long astrologerId, String reason);
+    AstrologerResponseModel rejectAstrologer(Long astrologerId, String reason);
 
-    DashboardStatsDTO getDashboardStats();
+    DashboardStatsModel getDashboardStats();
 
-    RevenueReportDTO getRevenueReport(LocalDate startDate, LocalDate endDate);
+    RevenueReportModel getRevenueReport(LocalDate startDate, LocalDate endDate);
 
-    WalletResponse adjustWallet(WalletAdjustRequest request);
+    WalletResponseModel adjustWallet(WalletAdjustRequestModel request);
 }

@@ -1,8 +1,8 @@
 package com.astrotalk.service;
 
-import com.astrotalk.dto.AstrologerResponse;
-import com.astrotalk.dto.RegisterAstrologerRequest;
-import com.astrotalk.dto.UpdateAstrologerRequest;
+import com.astrotalk.model.AstrologerResponseModel;
+import com.astrotalk.model.RegisterAstrologerRequestModel;
+import com.astrotalk.model.UpdateAstrologerRequestModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,29 +11,29 @@ import java.util.List;
 
 public interface AstrologerService {
 
-    AstrologerResponse registerAstrologer(RegisterAstrologerRequest request);
+    AstrologerResponseModel registerAstrologer(RegisterAstrologerRequestModel request);
 
-    AstrologerResponse getAstrologerById(Long id);
+    AstrologerResponseModel getAstrologerById(Long id);
 
-    AstrologerResponse getAstrologerByEmail(String email);
+    AstrologerResponseModel getAstrologerByEmail(String email);
 
-    AstrologerResponse updateAstrologer(Long id, UpdateAstrologerRequest request);
+    AstrologerResponseModel updateAstrologer(Long id, UpdateAstrologerRequestModel request);
 
     void deleteAstrologer(Long id);
 
-    List<AstrologerResponse> getAllAstrologers();
+    List<AstrologerResponseModel> getAllAstrologers();
 
-    List<AstrologerResponse> getAvailableAstrologers();
+    List<AstrologerResponseModel> getAvailableAstrologers();
 
-    List<AstrologerResponse> getAstrologersBySpecialization(String specialization);
+    List<AstrologerResponseModel> getAstrologersBySpecialization(String specialization);
 
-    AstrologerResponse verifyAstrologer(Long id);
+    AstrologerResponseModel verifyAstrologer(Long id);
 
-    Page<AstrologerResponse> searchAstrologers(String specialization, String language,
-                                                BigDecimal minPrice, BigDecimal maxPrice,
-                                                Double minRating, Boolean isOnline, Pageable pageable);
+    Page<AstrologerResponseModel> searchAstrologers(String specialization, String language,
+                                                     BigDecimal minPrice, BigDecimal maxPrice,
+                                                     Double minRating, Boolean isOnline, Pageable pageable);
 
-    List<AstrologerResponse> getTopAstrologers();
+    List<AstrologerResponseModel> getTopAstrologers();
 
-    AstrologerResponse getAstrologerProfile(Long id);
+    AstrologerResponseModel getAstrologerProfile(Long id);
 }

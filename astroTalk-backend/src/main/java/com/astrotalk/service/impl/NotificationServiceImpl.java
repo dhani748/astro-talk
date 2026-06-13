@@ -1,6 +1,6 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.NotificationResponse;
+import com.astrotalk.model.NotificationResponseModel;
 import com.astrotalk.entity.Notification;
 import com.astrotalk.entity.NotificationType;
 import com.astrotalk.exception.ResourceNotFoundException;
@@ -22,7 +22,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public NotificationResponse sendNotification(Long userId, String title, String message, NotificationType type) {
+    public NotificationResponseModel sendNotification(Long userId, String title, String message, NotificationType type) {
         Notification notification = Notification.builder()
                 .userId(userId)
                 .title(title)
@@ -32,7 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .build();
 
         notification = notificationRepository.save(notification);
-        NotificationResponse response = toNotificationResponse(notification);
+        NotificationResponseModel response = toNotificationResponse(notification);
 
         messagingTemplate.convertAndSend(
                 "/topic/user/" + userId + "/notifications",
@@ -43,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Page<NotificationResponse> getNotifications(Long userId, Pageable pageable) {
+    public Page<NotificationResponseModel> getNotifications(Long userId, Pageable pageable) {
         return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
                 .map(this::toNotificationResponse);
     }
@@ -69,6 +69,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public NotificationResponseModel getNotificationById(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Notification", id));
+        return toNotificationResponse(notification);
+    }
+
+    @Override
     @Transactional
     public void sendLowBalanceAlert(Long userId) {
         sendNotification(userId, "Low Balance Warning",
@@ -84,8 +91,8 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationType.SESSION_START);
     }
 
-    private NotificationResponse toNotificationResponse(Notification n) {
-        return NotificationResponse.builder()
+    private NotificationResponseModel toNotificationResponse(Notification n) {
+        return NotificationResponseModel.builder()
                 .id(n.getId())
                 .userId(n.getUserId())
                 .title(n.getTitle())

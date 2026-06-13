@@ -43,7 +43,7 @@ public class NotificationController {
      * @param authentication the current authenticated user
      * @param page           zero-based page index (default 0)
      * @param size           page size (default 20)
-     * @return paginated list of {@link NotificationResponseModel}
+     * @return paginated list of {@link NotificationResponse}
      */
     @GetMapping
     @Operation(summary = "Get notifications", description = "Returns paginated notifications for the user")
@@ -52,7 +52,7 @@ public class NotificationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(notificationService.getNotifications(user.getUserId(), PageRequest.of(page, size)));
+        return ResponseEntity.ok(notificationService.getNotifications(user.getId(), PageRequest.of(page, size)));
     }
 
     /**
@@ -65,14 +65,14 @@ public class NotificationController {
     @Operation(summary = "Get unread notification count", description = "Returns count of unread notifications")
     public ResponseEntity<Map<String, Long>> getUnreadCount(Authentication authentication) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(Map.of("unreadCount", notificationService.getUnreadCount(user.getUserId())));
+        return ResponseEntity.ok(Map.of("unreadCount", notificationService.getUnreadCount(user.getId())));
     }
 
     /**
      * GET /notifications/{id} - Returns a notification by its ID.
      *
      * @param id the notification ID
-     * @return the {@link NotificationResponseModel}
+     * @return the {@link NotificationResponse}
      */
     @GetMapping(WebResource.ID_PATH)
     @Operation(summary = "Get notification by ID", description = "Returns a notification by its ID")
@@ -103,7 +103,7 @@ public class NotificationController {
     @Operation(summary = "Mark all as read", description = "Marks all unread notifications as read")
     public ResponseEntity<Void> markAllAsRead(Authentication authentication) {
         User user = getCurrentUser(authentication);
-        notificationService.markAllAsRead(user.getUserId());
+        notificationService.markAllAsRead(user.getId());
         return ResponseEntity.ok().build();
     }
 

@@ -44,7 +44,7 @@ public class ReviewController {
      *
      * @param authentication the current authenticated user
      * @param request        the review details (consultation ID, rating, comment)
-     * @return the created {@link ReviewResponseModel}
+     * @return the created {@link ReviewResponse}
      */
     @PostMapping
     @Operation(summary = "Submit a review", description = "Submit a rating and comment for a completed consultation")
@@ -52,7 +52,7 @@ public class ReviewController {
             Authentication authentication,
             @Valid @RequestBody ReviewRequestModel request) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(reviewService.submitReview(user.getUserId(), request));
+        return ResponseEntity.ok(reviewService.submitReview(user.getId(), request));
     }
 
     /**
@@ -61,7 +61,7 @@ public class ReviewController {
      * @param id   the astrologer's ID
      * @param page zero-based page index (default 0)
      * @param size page size (default 10)
-     * @return paginated list of {@link ReviewResponseModel}
+     * @return paginated list of {@link ReviewResponse}
      */
     @GetMapping(WebResource.ASTRologer_REVIEWS)
     @Operation(summary = "Get astrologer reviews", description = "Returns paginated reviews for an astrologer")

@@ -1,17 +1,19 @@
 package com.astrotalk.service;
 
-import com.astrotalk.dto.ConsultationResponse;
-import com.astrotalk.dto.StartConsultationRequest;
+import com.astrotalk.model.ConsultationResponseModel;
+import com.astrotalk.model.StartConsultationRequestModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ConsultationService {
 
-    ConsultationResponse startConsultation(Long userId, StartConsultationRequest request);
+    ConsultationResponseModel startConsultation(Long userId, StartConsultationRequestModel request);
 
-    ConsultationResponse endConsultation(Long consultationId);
+    ConsultationResponseModel endConsultation(Long consultationId);
 
-    ConsultationResponse getActiveConsultation(Long userId);
+    ConsultationResponseModel getActiveConsultation(Long userId);
 
-    Page<ConsultationResponse> getConsultationHistory(Long userId, Pageable pageable);
+    Page<ConsultationResponseModel> getConsultationHistory(Long userId, Pageable pageable);
+
+    ConsultationResponseModel getConsultationById(Long id);
 }

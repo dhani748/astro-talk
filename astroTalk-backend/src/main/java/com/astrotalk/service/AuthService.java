@@ -1,12 +1,20 @@
 package com.astrotalk.service;
 
-import com.astrotalk.dto.*;
+import com.astrotalk.model.*;
 
 public interface AuthService {
 
-    AuthResponse registerUser(RegisterRequest request);
+    AuthResponseModel registerUser(RegisterRequestModel request);
 
-    AuthResponse registerAstrologer(RegisterAstrologerRequest request);
+    AuthResponseModel registerAstrologer(RegisterAstrologerRequestModel request);
 
-    AuthResponse login(LoginRequest request);
+    AuthResponseModel login(LoginRequestModel request);
+
+    AuthResponseModel refreshToken(RefreshTokenModel request);
+
+    void logout(String token);
+
+    void forgetPassword(String email);
+
+    void resetPassword(String token, String password, String confirmPassword);
 }

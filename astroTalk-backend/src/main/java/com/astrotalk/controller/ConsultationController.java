@@ -45,7 +45,7 @@ public class ConsultationController {
      *
      * @param authentication the current authenticated user
      * @param request        the consultation start details (astrologer ID, type)
-     * @return the created {@link ConsultationResponseModel}
+     * @return the created {@link ConsultationResponse}
      */
     @PostMapping(WebResource.START)
     @Operation(summary = "Start a consultation", description = "Initiates a consultation with an astrologer after wallet check")
@@ -53,14 +53,14 @@ public class ConsultationController {
             Authentication authentication,
             @Valid @RequestBody StartConsultationRequestModel request) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(consultationService.startConsultation(user.getUserId(), request));
+        return ResponseEntity.ok(consultationService.startConsultation(user.getId(), request));
     }
 
     /**
      * POST /consultations/{id}/end - Completes an active consultation and processes final billing.
      *
      * @param id the consultation ID to end
-     * @return the completed {@link ConsultationResponseModel}
+     * @return the completed {@link ConsultationResponse}
      */
     @PostMapping(WebResource.END)
     @Operation(summary = "End a consultation", description = "Completes an active consultation and processes final billing")
@@ -72,13 +72,13 @@ public class ConsultationController {
      * GET /consultations/active - Returns the currently active consultation for the authenticated user.
      *
      * @param authentication the current authenticated user
-     * @return the active {@link ConsultationResponseModel} or an error if none exists
+     * @return the active {@link ConsultationResponse} or an error if none exists
      */
     @GetMapping(WebResource.ACTIVE)
     @Operation(summary = "Get active consultation", description = "Returns the currently active consultation for the user")
     public ResponseEntity<ConsultationResponseModel> getActiveConsultation(Authentication authentication) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(consultationService.getActiveConsultation(user.getUserId()));
+        return ResponseEntity.ok(consultationService.getActiveConsultation(user.getId()));
     }
 
     /**
@@ -87,7 +87,7 @@ public class ConsultationController {
      * @param authentication the current authenticated user
      * @param page           zero-based page index (default 0)
      * @param size           page size (default 10)
-     * @return paginated list of {@link ConsultationResponseModel}
+     * @return paginated list of {@link ConsultationResponse}
      */
     @GetMapping(WebResource.HISTORY)
     @Operation(summary = "Get consultation history", description = "Returns paginated consultation history for the user")
@@ -96,14 +96,14 @@ public class ConsultationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(consultationService.getConsultationHistory(user.getUserId(), PageRequest.of(page, size)));
+        return ResponseEntity.ok(consultationService.getConsultationHistory(user.getId(), PageRequest.of(page, size)));
     }
 
     /**
      * GET /consultations/{id} - Returns a consultation by its ID.
      *
      * @param id the consultation ID
-     * @return the {@link ConsultationResponseModel}
+     * @return the {@link ConsultationResponse}
      */
     @GetMapping(WebResource.ID_PATH)
     @Operation(summary = "Get consultation by ID", description = "Returns a consultation by its ID")

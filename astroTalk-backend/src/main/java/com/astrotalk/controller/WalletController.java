@@ -42,13 +42,13 @@ public class WalletController {
      * GET /wallet/balance - Returns the current wallet balance for the authenticated user.
      *
      * @param authentication the current authenticated user
-     * @return {@link WalletResponseModel} with balance and currency info
+     * @return {@link WalletResponse} with balance and currency info
      */
     @GetMapping(WebResource.BALANCE)
     @Operation(summary = "Get wallet balance", description = "Returns current wallet balance for authenticated user")
     public ResponseEntity<WalletResponseModel> getBalance(Authentication authentication) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(walletService.getBalance(user.getUserId()));
+        return ResponseEntity.ok(walletService.getBalance(user.getId()));
     }
 
     /**
@@ -66,7 +66,7 @@ public class WalletController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(walletService.getTransactionHistory(user.getUserId(), PageRequest.of(page, size)));
+        return ResponseEntity.ok(walletService.getTransactionHistory(user.getId(), PageRequest.of(page, size)));
     }
 
     /**
@@ -74,7 +74,7 @@ public class WalletController {
      *
      * @param authentication the current authenticated user
      * @param request        the amount to add
-     * @return updated {@link WalletResponseModel}
+     * @return updated {@link WalletResponse}
      */
     @PostMapping(WebResource.ADD)
     @Operation(summary = "Add money to wallet", description = "Credits the wallet with specified amount")
@@ -82,7 +82,7 @@ public class WalletController {
             Authentication authentication,
             @Valid @RequestBody AddMoneyRequestModel request) {
         User user = getCurrentUser(authentication);
-        return ResponseEntity.ok(walletService.addBalance(user.getUserId(), request.getAmount(), "Wallet top-up"));
+        return ResponseEntity.ok(walletService.addBalance(user.getId(), request.getAmount(), "Wallet top-up"));
     }
 
     private User getCurrentUser(Authentication authentication) {

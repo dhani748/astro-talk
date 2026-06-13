@@ -1,8 +1,8 @@
 package com.astrotalk.service.impl;
 
 import com.astrotalk.config.JwtUtil;
-import com.astrotalk.dto.AuthResponse;
-import com.astrotalk.dto.GoogleLoginRequest;
+import com.astrotalk.model.AuthResponseModel;
+import com.astrotalk.model.GoogleLoginRequestModel;
 import com.astrotalk.entity.Role;
 import com.astrotalk.entity.User;
 import com.astrotalk.exception.InvalidCredentialsException;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
     private String googleClientId;
 
     @Override
-    public AuthResponse authenticate(GoogleLoginRequest request) {
+    public AuthResponseModel authenticate(GoogleLoginRequestModel request) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(), GsonFactory.getDefaultInstance())
@@ -71,8 +72,8 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
                 log.info("New user created via Google: {}", email);
             }
 
-            String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-            return AuthResponse.builder()
+            String token = jwtUtil.generateAccessToken(user.getEmail(), List.of(user.getRole().name()));
+            return AuthResponseModel.builder()
                     .token(token)
                     .id(user.getId())
                     .name(user.getName())

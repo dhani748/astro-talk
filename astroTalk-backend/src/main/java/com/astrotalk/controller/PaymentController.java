@@ -36,7 +36,7 @@ public class PaymentController {
      *
      * @param authentication the current authenticated user
      * @param request        the order details (amount, currency)
-     * @return {@link RazorpayOrderResponseModel} with order ID and payment options
+     * @return {@link RazorpayOrderResponse} with order ID and payment options
      */
     @PostMapping(WebResource.CREATE_ORDER)
     @Operation(summary = "Create Razorpay order", description = "Creates a payment order via Razorpay")
@@ -51,7 +51,7 @@ public class PaymentController {
      *
      * @param authentication the current authenticated user
      * @param request        the payment verification details (Razorpay order ID, payment ID, signature)
-     * @return updated {@link WalletResponseModel}
+     * @return updated {@link WalletResponse}
      */
     @PostMapping(WebResource.VERIFY)
     @Operation(summary = "Verify payment", description = "Verifies Razorpay payment signature and credits wallet")

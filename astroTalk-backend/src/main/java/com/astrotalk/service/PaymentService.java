@@ -1,13 +1,13 @@
 package com.astrotalk.service;
 
-import com.astrotalk.dto.PaymentVerifyRequest;
-import com.astrotalk.dto.RazorpayOrderRequest;
-import com.astrotalk.dto.RazorpayOrderResponse;
-import com.astrotalk.dto.WalletResponse;
+import com.astrotalk.model.PaymentVerifyRequestModel;
+import com.astrotalk.model.RazorpayOrderRequestModel;
+import com.astrotalk.model.RazorpayOrderResponseModel;
+import com.astrotalk.model.WalletResponseModel;
 
 public interface PaymentService {
 
-    RazorpayOrderResponse createOrder(RazorpayOrderRequest request, String email);
+    RazorpayOrderResponseModel createOrder(RazorpayOrderRequestModel request, String email);
 
-    WalletResponse verifyPayment(PaymentVerifyRequest request, String email);
+    WalletResponseModel verifyPayment(PaymentVerifyRequestModel request, String email);
 }

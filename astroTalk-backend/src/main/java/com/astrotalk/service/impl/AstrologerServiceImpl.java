@@ -1,8 +1,8 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.AstrologerResponse;
-import com.astrotalk.dto.RegisterAstrologerRequest;
-import com.astrotalk.dto.UpdateAstrologerRequest;
+import com.astrotalk.model.AstrologerResponseModel;
+import com.astrotalk.model.RegisterAstrologerRequestModel;
+import com.astrotalk.model.UpdateAstrologerRequestModel;
 import com.astrotalk.entity.Astrologer;
 import com.astrotalk.entity.Role;
 import com.astrotalk.exception.DuplicateResourceException;
@@ -24,7 +24,7 @@ public class AstrologerServiceImpl implements AstrologerService {
     private final AstrologerRepository astrologerRepository;
 
     @Override
-    public AstrologerResponse registerAstrologer(RegisterAstrologerRequest request) {
+    public AstrologerResponseModel registerAstrologer(RegisterAstrologerRequestModel request) {
         if (astrologerRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateResourceException("Astrologer", "email", request.getEmail());
         }
@@ -51,21 +51,21 @@ public class AstrologerServiceImpl implements AstrologerService {
     }
 
     @Override
-    public AstrologerResponse getAstrologerById(Long id) {
+    public AstrologerResponseModel getAstrologerById(Long id) {
         Astrologer astrologer = astrologerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Astrologer", id));
         return toAstrologerResponse(astrologer);
     }
 
     @Override
-    public AstrologerResponse getAstrologerByEmail(String email) {
+    public AstrologerResponseModel getAstrologerByEmail(String email) {
         Astrologer astrologer = astrologerRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Astrologer", "email", email));
         return toAstrologerResponse(astrologer);
     }
 
     @Override
-    public AstrologerResponse updateAstrologer(Long id, UpdateAstrologerRequest request) {
+    public AstrologerResponseModel updateAstrologer(Long id, UpdateAstrologerRequestModel request) {
         Astrologer astrologer = astrologerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Astrologer", id));
 
@@ -110,28 +110,28 @@ public class AstrologerServiceImpl implements AstrologerService {
     }
 
     @Override
-    public List<AstrologerResponse> getAllAstrologers() {
+    public List<AstrologerResponseModel> getAllAstrologers() {
         return astrologerRepository.findAll().stream()
                 .map(this::toAstrologerResponse)
                 .toList();
     }
 
     @Override
-    public List<AstrologerResponse> getAvailableAstrologers() {
+    public List<AstrologerResponseModel> getAvailableAstrologers() {
         return astrologerRepository.findByIsAvailable(true).stream()
                 .map(this::toAstrologerResponse)
                 .toList();
     }
 
     @Override
-    public List<AstrologerResponse> getAstrologersBySpecialization(String specialization) {
+    public List<AstrologerResponseModel> getAstrologersBySpecialization(String specialization) {
         return astrologerRepository.findBySpecialization(specialization).stream()
                 .map(this::toAstrologerResponse)
                 .toList();
     }
 
     @Override
-    public AstrologerResponse verifyAstrologer(Long id) {
+    public AstrologerResponseModel verifyAstrologer(Long id) {
         Astrologer astrologer = astrologerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Astrologer", id));
         astrologer.setVerified(true);
@@ -140,7 +140,7 @@ public class AstrologerServiceImpl implements AstrologerService {
     }
 
     @Override
-    public Page<AstrologerResponse> searchAstrologers(String specialization, String language,
+    public Page<AstrologerResponseModel> searchAstrologers(String specialization, String language,
                                                        BigDecimal minPrice, BigDecimal maxPrice,
                                                        Double minRating, Boolean isOnline, Pageable pageable) {
         return astrologerRepository.searchAstrologers(specialization, language, minPrice, maxPrice, minRating, isOnline, pageable)
@@ -148,19 +148,19 @@ public class AstrologerServiceImpl implements AstrologerService {
     }
 
     @Override
-    public List<AstrologerResponse> getTopAstrologers() {
+    public List<AstrologerResponseModel> getTopAstrologers() {
         return astrologerRepository.findTop6ByOrderByRatingDesc().stream()
                 .map(this::toAstrologerResponse)
                 .toList();
     }
 
     @Override
-    public AstrologerResponse getAstrologerProfile(Long id) {
+    public AstrologerResponseModel getAstrologerProfile(Long id) {
         return getAstrologerById(id);
     }
 
-    private AstrologerResponse toAstrologerResponse(Astrologer astrologer) {
-        return AstrologerResponse.builder()
+    private AstrologerResponseModel toAstrologerResponse(Astrologer astrologer) {
+        return AstrologerResponseModel.builder()
                 .id(astrologer.getId())
                 .name(astrologer.getName())
                 .email(astrologer.getEmail())

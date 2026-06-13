@@ -1,7 +1,7 @@
 package com.astrotalk.service.impl;
 
-import com.astrotalk.dto.ChatHistoryResponse;
-import com.astrotalk.dto.MessageResponse;
+import com.astrotalk.model.ChatHistoryResponseModel;
+import com.astrotalk.model.MessageResponseModel;
 import com.astrotalk.entity.Message;
 import com.astrotalk.entity.MessageType;
 import com.astrotalk.entity.SenderRole;
@@ -23,7 +23,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Transactional
-    public MessageResponse sendMessage(Long consultationId, Long senderId, SenderRole senderRole, String content, MessageType messageType) {
+    public MessageResponseModel sendMessage(Long consultationId, Long senderId, SenderRole senderRole, String content, MessageType messageType) {
         Message message = Message.builder()
                 .consultationId(consultationId)
                 .senderId(senderId)
@@ -38,11 +38,11 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatHistoryResponse getMessageHistory(Long consultationId, int page, int size) {
+    public ChatHistoryResponseModel getMessageHistory(Long consultationId, int page, int size) {
         Page<Message> messagePage = messageRepository
                 .findByConsultationIdOrderByCreatedAtAsc(consultationId, PageRequest.of(page, size));
 
-        return ChatHistoryResponse.builder()
+        return ChatHistoryResponseModel.builder()
                 .messages(messagePage.getContent().stream().map(this::toMessageResponse).toList())
                 .currentPage(messagePage.getNumber())
                 .totalPages(messagePage.getTotalPages())
@@ -61,8 +61,8 @@ public class ChatServiceImpl implements ChatService {
         return messageRepository.countByConsultationIdAndSenderRoleAndIsReadFalse(consultationId, senderRole);
     }
 
-    private MessageResponse toMessageResponse(Message message) {
-        return MessageResponse.builder()
+    private MessageResponseModel toMessageResponse(Message message) {
+        return MessageResponseModel.builder()
                 .id(message.getId())
                 .consultationId(message.getConsultationId())
                 .senderId(message.getSenderId())

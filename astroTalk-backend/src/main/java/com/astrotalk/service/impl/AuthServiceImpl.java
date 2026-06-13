@@ -1,7 +1,7 @@
 package com.astrotalk.service.impl;
 
 import com.astrotalk.config.JwtUtil;
-import com.astrotalk.dto.*;
+import com.astrotalk.model.*;
 import com.astrotalk.entity.Astrologer;
 import com.astrotalk.entity.Role;
 import com.astrotalk.entity.User;
@@ -13,6 +13,8 @@ import com.astrotalk.repository.UserRepository;
 import com.astrotalk.service.AuthService;
 import com.astrotalk.service.WalletService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final WalletService walletService;
 
     @Override
-    public AuthResponse registerUser(RegisterRequest request) {
+    public AuthResponseModel registerUser(RegisterRequestModel request) {
         log.info("Registering user with email: {}", request.getEmail());
 
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -57,10 +59,10 @@ public class AuthServiceImpl implements AuthService {
 
         user = userRepository.save(user);
         walletService.giveSignupBonus(user.getId());
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateAccessToken(user.getEmail(), List.of(user.getRole().name()));
 
         log.info("User registered successfully: {} (id={})", user.getEmail(), user.getId());
-        return AuthResponse.builder()
+        return AuthResponseModel.builder()
                 .token(token)
                 .id(user.getId())
                 .name(user.getName())
@@ -70,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse registerAstrologer(RegisterAstrologerRequest request) {
+    public AuthResponseModel registerAstrologer(RegisterAstrologerRequestModel request) {
         log.info("Registering astrologer with email: {}", request.getEmail());
 
         if (astrologerRepository.existsByEmail(request.getEmail())) {
@@ -96,10 +98,10 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         astrologer = astrologerRepository.save(astrologer);
-        String token = jwtUtil.generateToken(astrologer.getEmail(), astrologer.getRole().name());
+        String token = jwtUtil.generateAccessToken(astrologer.getEmail(), List.of(astrologer.getRole().name()));
 
         log.info("Astrologer registered successfully: {} (id={})", astrologer.getEmail(), astrologer.getId());
-        return AuthResponse.builder()
+        return AuthResponseModel.builder()
                 .token(token)
                 .id(astrologer.getId())
                 .name(astrologer.getName())
@@ -109,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponseModel login(LoginRequestModel request) {
         log.info("Login attempt for email: {}", request.getEmail());
 
         User user = userRepository.findByEmail(request.getEmail()).orElse(null);
@@ -119,9 +121,9 @@ public class AuthServiceImpl implements AuthService {
                 log.warn("Incorrect password for user email: {}", request.getEmail());
                 throw new InvalidCredentialsException("Incorrect password. Please try again.");
             }
-            String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+            String token = jwtUtil.generateAccessToken(user.getEmail(), List.of(user.getRole().name()));
             log.info("User login successful: {} (role=USER)", user.getEmail());
-            return AuthResponse.builder()
+            return AuthResponseModel.builder()
                     .token(token)
                     .id(user.getId())
                     .name(user.getName())
@@ -142,14 +144,42 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentialsException("Incorrect password. Please try again.");
         }
 
-        String token = jwtUtil.generateToken(astrologer.getEmail(), astrologer.getRole().name());
+        String token = jwtUtil.generateAccessToken(astrologer.getEmail(), List.of(astrologer.getRole().name()));
         log.info("Astrologer login successful: {} (role=ASTROLOGER)", astrologer.getEmail());
-        return AuthResponse.builder()
+        return AuthResponseModel.builder()
                 .token(token)
                 .id(astrologer.getId())
                 .name(astrologer.getName())
                 .email(astrologer.getEmail())
                 .role(astrologer.getRole())
                 .build();
+    }
+
+    @Override
+    public AuthResponseModel refreshToken(RefreshTokenModel request) {
+        String email = jwtUtil.extractEmail(request.getRefreshToken());
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null) {
+            String token = jwtUtil.generateAccessToken(email, List.of(user.getRole().name()));
+            return AuthResponseModel.builder().token(token).id(user.getId()).name(user.getName()).email(user.getEmail()).role(user.getRole()).build();
+        }
+        Astrologer astrologer = astrologerRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        String token = jwtUtil.generateAccessToken(email, List.of(astrologer.getRole().name()));
+        return AuthResponseModel.builder().token(token).id(astrologer.getId()).name(astrologer.getName()).email(astrologer.getEmail()).role(astrologer.getRole()).build();
+    }
+
+    @Override
+    public void logout(String token) {
+        log.info("Logout for token");
+    }
+
+    @Override
+    public void forgetPassword(String email) {
+        log.info("Forget password request for email: {}", email);
+    }
+
+    @Override
+    public void resetPassword(String token, String password, String confirmPassword) {
+        log.info("Reset password with token");
     }
 }
