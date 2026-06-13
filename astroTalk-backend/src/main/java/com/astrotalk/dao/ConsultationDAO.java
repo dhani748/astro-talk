@@ -65,10 +65,10 @@ public class ConsultationDAO {
      * @param pageable the pagination information
      * @return a page of consultations for the user
      */
-    public Page<Consultation> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable) {
+    public Page<Consultation> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable) {
         log.debug("Finding consultations by user id: {}", userId);
         try {
-            return consultationRepository.findByUserUserIdOrderByCreatedAtDesc(userId, pageable);
+            return consultationRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
         } catch (Exception e) {
             log.error("Error finding consultations by user id: {}", userId, e);
             throw e;
@@ -99,10 +99,10 @@ public class ConsultationDAO {
      * @param status the consultation status filter
      * @return an Optional containing the matching consultation, or empty if not found
      */
-    public Optional<Consultation> findByUserIdAndStatus(String userId, ConsultationStatus status) {
+    public Optional<Consultation> findByUserIdAndStatus(Long userId, ConsultationStatus status) {
         log.debug("Finding consultation by user id: {} and status: {}", userId, status);
         try {
-            return consultationRepository.findByUserUserIdAndStatus(userId, status);
+            return consultationRepository.findByUserIdAndStatus(userId, status);
         } catch (Exception e) {
             log.error("Error finding consultation by user id: {} and status: {}", userId, status, e);
             throw e;

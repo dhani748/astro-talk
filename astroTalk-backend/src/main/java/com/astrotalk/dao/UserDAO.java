@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-
 /**
  * Data access layer wrapping {@link UserRepository} for {@link User} entity operations.
  * Provides CRUD methods and specialized queries with logging and error handling.
@@ -42,34 +40,12 @@ public class UserDAO {
         }
     }
 
-    /**
-     * Finds a user by their internal UUID.
-     *
-     * @param id the user UUID
-     * @return an Optional containing the user, or empty if not found
-     */
-    public Optional<User> findById(UUID id) {
+    public Optional<User> findById(Long id) {
         log.debug("Finding user by id: {}", id);
         try {
             return userRepository.findById(id);
         } catch (Exception e) {
             log.error("Error finding user by id: {}", id, e);
-            throw e;
-        }
-    }
-
-    /**
-     * Finds a user by their external business key.
-     *
-     * @param userId the external user ID string
-     * @return an Optional containing the user, or empty if not found
-     */
-    public Optional<User> findByUserId(String userId) {
-        log.debug("Finding user by userId: {}", userId);
-        try {
-            return userRepository.findByUserId(userId);
-        } catch (Exception e) {
-            log.error("Error finding user by userId: {}", userId, e);
             throw e;
         }
     }

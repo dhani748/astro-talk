@@ -75,7 +75,7 @@ public class NotificationDAO {
      * @param pageable the pagination information
      * @return a page of notifications
      */
-    public Page<Notification> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable) {
+    public Page<Notification> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable) {
         log.debug("Finding notifications by user id: {}", userId);
         try {
             return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
@@ -91,7 +91,7 @@ public class NotificationDAO {
      * @param userId the user ID
      * @return the count of unread notifications
      */
-    public long countByUserIdAndIsReadFalse(String userId) {
+    public long countByUserIdAndIsReadFalse(Long userId) {
         log.debug("Counting unread notifications by user id: {}", userId);
         try {
             return notificationRepository.countByUserIdAndIsReadFalse(userId);
@@ -107,7 +107,7 @@ public class NotificationDAO {
      * @param userId the user ID
      * @return the number of notifications marked as read
      */
-    public int markAllAsRead(String userId) {
+    public int markAllAsRead(Long userId) {
         log.debug("Marking all notifications as read for user: {}", userId);
         try {
             return notificationRepository.markAllAsRead(userId);
