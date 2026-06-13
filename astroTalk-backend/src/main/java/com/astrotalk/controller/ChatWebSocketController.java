@@ -1,12 +1,12 @@
 package com.astrotalk.controller;
 
-import com.astrotalk.dto.MessageRequest;
-import com.astrotalk.dto.MessageResponse;
-import com.astrotalk.dto.TypingIndicator;
 import com.astrotalk.entity.Astrologer;
 import com.astrotalk.entity.Role;
 import com.astrotalk.entity.SenderRole;
 import com.astrotalk.entity.User;
+import com.astrotalk.model.MessageRequestModel;
+import com.astrotalk.model.MessageResponseModel;
+import com.astrotalk.model.TypingIndicatorModel;
 import com.astrotalk.repository.AstrologerRepository;
 import com.astrotalk.repository.UserRepository;
 import com.astrotalk.service.ChatService;
@@ -19,6 +19,10 @@ import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 
+/**
+ * WebSocket controller for real-time chat messaging.
+ * Handles sending messages, read receipts, and typing indicators via STOMP.
+ */
 @Controller
 @RequiredArgsConstructor
 public class ChatWebSocketController {
@@ -28,8 +32,14 @@ public class ChatWebSocketController {
     private final UserRepository userRepository;
     private final AstrologerRepository astrologerRepository;
 
+    /**
+     * Handles /chat.send - Persists and broadcasts a chat message to the consultation topic.
+     *
+     * @param request       the message payload (consultation ID, content, type)
+     * @param headerAccessor used to extract the authenticated sender principal
+     */
     @MessageMapping("/chat.send")
-    public void sendMessage(@Payload MessageRequest request, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendMessage(@Payload MessageRequestModel request, SimpMessageHeaderAccessor headerAccessor) {
         Principal principal = headerAccessor.getUser();
         if (principal == null) return;
 
@@ -37,19 +47,19 @@ public class ChatWebSocketController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null) {
-            handleSend(request, user.getId(), SenderRole.USER);
+            handleSend(request, user.getUserId(), SenderRole.USER);
             return;
         }
 
         Astrologer astrologer = astrologerRepository.findByEmail(email)
                 .orElse(null);
         if (astrologer != null) {
-            handleSend(request, astrologer.getId(), SenderRole.ASTROLOGER);
+            handleSend(request, String.valueOf(astrologer.getId()), SenderRole.ASTROLOGER);
         }
     }
 
-    private void handleSend(MessageRequest request, Long senderId, SenderRole senderRole) {
-        MessageResponse response = chatService.sendMessage(
+    private void handleSend(MessageRequestModel request, String senderId, SenderRole senderRole) {
+        MessageResponseModel response = chatService.sendMessage(
                 request.getConsultationId(),
                 senderId,
                 senderRole,
@@ -63,8 +73,14 @@ public class ChatWebSocketController {
         );
     }
 
+    /**
+     * Handles /chat.read - Marks messages as read and broadcasts a read receipt.
+     *
+     * @param request       the message payload containing the consultation ID
+     * @param headerAccessor used to extract the authenticated principal
+     */
     @MessageMapping("/chat.read")
-    public void markAsRead(@Payload MessageRequest request, SimpMessageHeaderAccessor headerAccessor) {
+    public void markAsRead(@Payload MessageRequestModel request, SimpMessageHeaderAccessor headerAccessor) {
         Principal principal = headerAccessor.getUser();
         if (principal == null) return;
 
@@ -79,8 +95,14 @@ public class ChatWebSocketController {
         );
     }
 
+    /**
+     * Handles /chat.typing - Broadcasts a typing indicator to the consultation topic.
+     *
+     * @param indicator     the typing indicator payload (consultation ID, sender info)
+     * @param headerAccessor used to extract the authenticated principal
+     */
     @MessageMapping("/chat.typing")
-    public void typing(@Payload TypingIndicator indicator, SimpMessageHeaderAccessor headerAccessor) {
+    public void typing(@Payload TypingIndicatorModel indicator, SimpMessageHeaderAccessor headerAccessor) {
         Principal principal = headerAccessor.getUser();
         if (principal == null) return;
 
@@ -88,12 +110,13 @@ public class ChatWebSocketController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null) {
-            indicator.setSenderId(user.getId());
+            indicator.setSenderId(user.getUserId());
             indicator.setSenderRole(SenderRole.USER);
         } else {
             Astrologer astrologer = astrologerRepository.findByEmail(email).orElse(null);
             if (astrologer == null) return;
-            indicator.setSenderId(astrologer.getId());
+            indicator.setSenderId(String.valueOf(astrologer.getId()));
+            indicator.setSenderRole(SenderRole.ASTROLOGER);
             indicator.setSenderRole(SenderRole.ASTROLOGER);
         }
 

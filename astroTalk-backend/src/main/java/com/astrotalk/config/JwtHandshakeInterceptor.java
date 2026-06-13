@@ -13,12 +13,24 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * WebSocket STOMP channel interceptor that authenticates WebSocket connections by validating
+ * the JWT Bearer token from the STOMP CONNECT frame's Authorization header.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtHandshakeInterceptor implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
 
+    /**
+     * Intercepts STOMP CONNECT commands to validate the JWT token and set the authenticated
+     * user on the session.
+     *
+     * @param message the incoming STOMP message
+     * @param channel the message channel
+     * @return the original message, possibly with user authentication set
+     */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
@@ -31,13 +43,20 @@ public class JwtHandshakeInterceptor implements ChannelInterceptor {
 
                 if (jwtUtil.isTokenValid(token)) {
                     String email = jwtUtil.extractEmail(token);
-                    String role = jwtUtil.extractRole(token);
+                    String tokenType = jwtUtil.extractTokenType(token);
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    email, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+                    if (email != null && JwtUtil.TOKEN_TYPE_ACCESS.equals(tokenType)) {
+                        List<String> roles = jwtUtil.extractRoles(token);
+                        List<SimpleGrantedAuthority> authorities = roles.stream()
+                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                                .toList();
 
-                    accessor.setUser(authentication);
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(
+                                        email, null, authorities);
+
+                        accessor.setUser(authentication);
+                    }
                 }
             }
         }
