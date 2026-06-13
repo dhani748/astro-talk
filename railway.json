@@ -1,5 +1,6 @@
 {
-"build": {
- "dockerfilePath": "astroTalk-backend/Dockerfile"
-}
+ "build": {
+  "dockerfilePath": "astroTalk-backend/Dockerfile",
+  "buildContext": "astroTalk-backend"
+ }
 }
