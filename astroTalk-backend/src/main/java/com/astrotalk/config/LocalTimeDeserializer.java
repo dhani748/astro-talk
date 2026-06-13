@@ -8,7 +8,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.time.LocalTime;
 
+/**
+ * Custom Jackson deserializer for {@link LocalTime} that supports both ISO text format
+ * and JSON object representation with hour, minute, second, and nano fields.
+ */
 public class LocalTimeDeserializer extends JsonDeserializer<LocalTime> {
+    /**
+     * Deserializes a JSON value into a {@link LocalTime}. Accepts a text string in ISO format
+     * or an object with hour, minute, optional second, and optional nano fields.
+     *
+     * @param p    the JSON parser
+     * @param ctxt the deserialization context
+     * @return the parsed LocalTime
+     * @throws IOException if parsing fails
+     */
     @Override
     public LocalTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.getCodec().readTree(p);

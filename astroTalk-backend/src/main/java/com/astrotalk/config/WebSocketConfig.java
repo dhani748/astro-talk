@@ -8,6 +8,10 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+/**
+ * WebSocket configuration that enables STOMP message broker, registers the /ws endpoint
+ * with SockJS fallback, and configures the JWT handshake interceptor for inbound channels.
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
@@ -15,12 +19,23 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtHandshakeInterceptor jwtHandshakeInterceptor;
 
+    /**
+     * Configures the simple message broker with /topic and /queue destinations
+     * and sets /app as the application destination prefix.
+     *
+     * @param config the MessageBrokerRegistry to configure
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic", "/queue");
         config.setApplicationDestinationPrefixes("/app");
     }
 
+    /**
+     * Registers the /ws STOMP endpoint with SockJS fallback and allows all origin patterns.
+     *
+     * @param registry the StompEndpointRegistry to register endpoints with
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
@@ -28,6 +43,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
+    /**
+     * Adds the JWT handshake interceptor to authenticate incoming STOMP connections.
+     *
+     * @param registration the ChannelRegistration to add interceptors to
+     */
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(jwtHandshakeInterceptor);
