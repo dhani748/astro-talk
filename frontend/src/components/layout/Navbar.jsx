@@ -38,7 +38,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="site-nav sticky top-0 z-40">
+      <nav className="bg-cosmic-2/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[70px]">
           <Link to="/" className="nav-brand" style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: 'var(--gold)', letterSpacing: '0.12em' }}>
             AstroTalk
@@ -86,14 +86,22 @@ export default function Navbar() {
               )}
             </div>
 
-            {isAuthenticated ? (
+            {isAuthenticated && user ? (
               <Link to={dashboardLink} className="btn-gold !px-5 !py-2.5 !text-[.65rem]">
                 {t.nav?.dashboard || 'Dashboard'}
               </Link>
             ) : (
-              <button onClick={() => setLoginOpen(true)} className="btn-gold !px-5 !py-2.5 !text-[.65rem]">
-                {t.nav?.signIn || 'Sign In'}
-              </button>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="px-4 py-2 text-xs font-medium tracking-[.2em] uppercase text-[var(--muted)] border border-[rgba(201,168,76,0.2)] rounded hover:border-[rgba(201,168,76,0.4)] transition-colors"
+                >
+                  Log In
+                </Link>
+                <button onClick={() => setLoginOpen(true)} className="btn-gold !px-5 !py-2.5 !text-[.65rem]">
+                  {t.nav?.signIn || 'Sign In'}
+                </button>
+              </div>
             )}
 
             <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2 text-[var(--muted)] hover:text-[var(--gold)] transition-colors">
@@ -103,7 +111,7 @@ export default function Navbar() {
         </div>
 
         {mobileOpen && (
-          <div className="lg:hidden border-t border-[rgba(201,168,76,0.1)] bg-[var(--dark)] px-4 py-4 space-y-1">
+          <div className="lg:hidden border-t border-white/5 bg-cosmic-2 px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.label}

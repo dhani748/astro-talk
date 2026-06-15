@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authReducer from './authSlice'
-import walletReducer from './walletSlice'
-import consultationReducer from './consultationSlice'
-import notificationReducer from './notificationSlice'
-import astrologerReducer from './astrologerSlice'
+import authReducer from '../features/auth/store/authSlice'
+import walletReducer from '../features/wallet/store/walletSlice'
+import consultationReducer from '../features/consultation/store/consultationSlice'
+import notificationReducer from '../features/admin/store/notificationSlice'
+import astrologerReducer from '../features/astrologer/store/astrologerSlice'
 
 export const store = configureStore({
   reducer: {

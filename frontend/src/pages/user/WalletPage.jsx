@@ -42,16 +42,16 @@ const WalletPage = () => {
 
   return (
     <div className="page-transition">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Wallet</h1>
+      <h1 className="text-2xl font-bold text-light mb-6">Wallet</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-1">
           <WalletCard balance={balance} onAddMoney={() => setShowAddModal(true)} />
         </div>
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800">
-            <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-              <h2 className="font-semibold text-gray-900 dark:text-white">Quick Add</h2>
+          <div className="bg-cosmic-2 rounded-2xl border border-white/5">
+            <div className="flex items-center justify-between p-6 border-b border-white/5">
+              <h2 className="font-semibold text-light">Quick Add</h2>
             </div>
             <div className="p-6">
               <div className="flex flex-wrap gap-3 mb-4">
@@ -61,8 +61,8 @@ const WalletPage = () => {
                     onClick={() => setAmount(val)}
                     className={`px-4 py-2 rounded-xl text-sm font-medium border transition-colors ${
                       amount === val
-                        ? 'border-primary bg-primary/10 text-primary'
-                        : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-primary'
+                        ? 'border-gold bg-gold/10 text-gold'
+                        : 'border-white/10 text-muted hover:border-gold'
                     }`}
                   >
                     ₹{val}
@@ -75,7 +75,7 @@ const WalletPage = () => {
                   value={amount}
                   onChange={(e) => setAmount(Number(e.target.value))}
                   min={10}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  className="flex-1 px-4 py-2.5 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
                 />
                 <RazorpayButton amount={amount} onSuccess={() => { setShowAddModal(false); fetchData() }} />
               </div>
@@ -84,11 +84,11 @@ const WalletPage = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="font-semibold text-gray-900 dark:text-white">Transaction History</h2>
-          <button onClick={fetchData} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-            <FiRefreshCw className="text-gray-400" size={16} />
+      <div className="bg-cosmic-2 rounded-2xl border border-white/5">
+        <div className="flex items-center justify-between p-6 border-b border-white/5">
+          <h2 className="font-semibold text-light">Transaction History</h2>
+          <button onClick={fetchData} className="p-2 hover:bg-white/5 rounded-lg transition-colors">
+            <FiRefreshCw className="text-muted" size={16} />
           </button>
         </div>
         {transactions.length === 0 ? (
@@ -96,13 +96,13 @@ const WalletPage = () => {
             <EmptyState icon={FiList} title="No transactions" description="Your transactions will appear here" />
           </div>
         ) : (
-          <div className="divide-y divide-gray-100 dark:divide-gray-800">
+          <div className="divide-y divide-white/5">
             {transactions.map((tx) => (
               <TransactionRow key={tx.id} transaction={tx} />
             ))}
           </div>
         )}
-        <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+        <div className="p-4 border-t border-white/5">
           <Pagination currentPage={page + 1} totalPages={totalPages} onPageChange={(p) => setPage(p - 1)} />
         </div>
       </div>

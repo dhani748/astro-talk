@@ -25,11 +25,11 @@ const AdminRevenuePage = () => {
     <div className="page-transition">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Revenue</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Track platform earnings</p>
+          <h1 className="text-2xl font-bold text-light">Revenue</h1>
+          <p className="text-muted mt-1">Track platform earnings</p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-gray-400">Total Revenue</p>
+          <p className="text-xs text-muted">Total Revenue</p>
           <p className="text-2xl font-bold text-green-500">₹{total.toLocaleString()}</p>
         </div>
       </div>
@@ -38,7 +38,7 @@ const AdminRevenuePage = () => {
         {['daily', 'weekly', 'monthly', 'yearly'].map((r) => (
           <button key={r} onClick={() => setRange(r)}
             className={`px-4 py-2 rounded-xl text-sm font-medium capitalize transition-colors ${
-              range === r ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+              range === r ? 'bg-gold text-cosmic' : 'bg-white/5 text-muted hover:bg-white/10'
             }`}>
             {r}
           </button>
@@ -48,7 +48,7 @@ const AdminRevenuePage = () => {
       {loading ? (
         <LoadingSpinner className="py-20" size="lg" />
       ) : (
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800">
+        <div className="bg-cosmic-2 rounded-2xl p-6 border border-white/5">
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={revenue}>

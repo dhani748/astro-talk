@@ -3,7 +3,7 @@ import { FiInstagram, FiTwitter, FiYoutube } from 'react-icons/fi'
 
 const Footer = () => {
   return (
-    <footer style={{ background: 'var(--dark)', borderTop: '1px solid rgba(201,168,76,0.1)', padding: '4rem 6% 2rem' }}>
+    <footer className="bg-cosmic-2" style={{ borderTop: '1px solid rgba(201,168,76,0.1)', padding: '4rem 6% 2rem' }}>
       <div className="max-w-7xl mx-auto">
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '3rem', marginBottom: '3rem', paddingBottom: '3rem', borderBottom: '1px solid rgba(201,168,76,0.08)' }}
           className="max-md:grid-cols-1">

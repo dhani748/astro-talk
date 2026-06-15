@@ -32,14 +32,14 @@ const AstrologerCard = ({ astrologer }) => {
           </div>
           <div className="flex gap-2 mt-3">
             <Link
-              to={`/consultation/${astrologer.id}?type=chat`}
+              to={`/astrologers/${astrologer.id}`}
               className="btn-ghost !text-[.55rem] !px-3 !py-1.5 !inline-flex !items-center !gap-1"
               style={{ fontSize: '.6rem', padding: '.4rem .8rem' }}
             >
               <FiMessageCircle size={12} /> Chat
             </Link>
             <Link
-              to={`/consultation/${astrologer.id}?type=call`}
+              to={`/astrologers/${astrologer.id}`}
               className="btn-gold !text-[.55rem] !px-3 !py-1.5 !inline-flex !items-center !gap-1"
               style={{ fontSize: '.6rem', padding: '.4rem .8rem' }}
             >

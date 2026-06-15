@@ -7,7 +7,7 @@ export const getAstrologerProfile = (id) =>
   axiosInstance.get(`/astrologers/${id}`)
 
 export const toggleAstrologerStatus = () =>
-  axiosInstance.patch('/astrologers/status')
+  axiosInstance.put('/astrologers/status/toggle')
 
 export const updateAstrologerProfile = (data) =>
   axiosInstance.put('/astrologers/profile', data)

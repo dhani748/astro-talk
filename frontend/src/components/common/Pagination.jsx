@@ -22,9 +22,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="p-2 rounded-lg hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
-        <FiChevronLeft className="text-gray-600 dark:text-gray-400" />
+        <FiChevronLeft className="text-muted" />
       </button>
       {getPageNumbers().map((page) => (
         <button
@@ -32,8 +32,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           onClick={() => onPageChange(page)}
           className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
             page === currentPage
-              ? 'bg-primary text-white'
-              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              ? 'bg-gold text-cosmic'
+              : 'text-muted hover:bg-white/5'
           }`}
         >
           {page}
@@ -42,9 +42,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="p-2 rounded-lg hover:bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
-        <FiChevronRight className="text-gray-600 dark:text-gray-400" />
+        <FiChevronRight className="text-muted" />
       </button>
     </div>
   )

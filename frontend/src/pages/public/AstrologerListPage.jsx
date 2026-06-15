@@ -42,10 +42,10 @@ const AstrologerListPage = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 page-transition">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Find Astrologers</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{pagination.totalElements} experts available</p>
+          <h1 className="text-2xl font-bold text-gold">Find Astrologers</h1>
+          <p className="text-sm text-muted mt-1">{pagination.totalElements} experts available</p>
         </div>
-        <button onClick={() => setShowFilters(!showFilters)} className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+        <button onClick={() => setShowFilters(!showFilters)} className="lg:hidden flex items-center gap-2 px-4 py-2 border border-white/10 rounded-xl text-sm font-medium text-muted hover:bg-white/5 transition-colors">
           <FiSliders /> Filters
         </button>
       </div>

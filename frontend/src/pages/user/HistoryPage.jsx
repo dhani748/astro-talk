@@ -5,7 +5,7 @@ import Pagination from '../../components/common/Pagination'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 import EmptyState from '../../components/common/EmptyState'
 import { FiClock, FiMessageCircle, FiPhone, FiVideo } from 'react-icons/fi'
-import { format } from 'date-fns'
+import dayjs from 'dayjs'
 
 const HistoryPage = () => {
   const [history, setHistory] = useState([])
@@ -37,7 +37,7 @@ const HistoryPage = () => {
 
   return (
     <div className="page-transition">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Consultation History</h1>
+      <h1 className="text-2xl font-bold text-light mb-6">Consultation History</h1>
 
       <div className="flex gap-2 mb-6">
         {['all', 'chat', 'call', 'video'].map((t) => (
@@ -46,8 +46,8 @@ const HistoryPage = () => {
             onClick={() => { setFilter(t); setPage(1) }}
             className={`px-4 py-2 rounded-xl text-sm font-medium capitalize transition-colors ${
               filter === t
-                ? 'bg-primary text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                ? 'bg-gold text-cosmic'
+                : 'bg-white/5 text-muted hover:bg-white/10'
             }`}
           >
             {t}
@@ -60,18 +60,18 @@ const HistoryPage = () => {
       ) : history.length === 0 ? (
         <EmptyState icon={FiClock} title="No consultations found" description="Your consultation history will appear here" />
       ) : (
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 divide-y divide-gray-100 dark:divide-gray-800">
+        <div className="bg-cosmic-2 rounded-2xl border border-white/5 divide-y divide-white/5">
           {history.map((c) => {
             const Icon = typeIcons[c.type] || FiMessageCircle
             return (
-              <Link key={c.id} to={`/consultation/${c.id}`} className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Icon className="text-primary" size={18} />
+              <Link key={c.id} to={`/consultation/${c.id}`} className="flex items-center gap-4 p-4 hover:bg-white/5 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
+                  <Icon className="text-gold" size={18} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{c.astrologerName}</p>
-                  <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
-                    <span>{format(new Date(c.startTime), 'MMM dd, yyyy HH:mm')}</span>
+                  <p className="text-sm font-medium text-light truncate">{c.astrologerName}</p>
+                  <div className="flex items-center gap-2 text-xs text-muted mt-0.5">
+                    <span>{dayjs(c.startTime).format('MMM dd, yyyy HH:mm')}</span>
                     <span>•</span>
                     <span className="capitalize">{c.type}</span>
                     <span>•</span>
@@ -79,8 +79,8 @@ const HistoryPage = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-primary">₹{c.cost || 0}</p>
-                  <p className={`text-xs ${c.status === 'completed' ? 'text-green-500' : 'text-gray-400'}`}>{c.status}</p>
+                  <p className="text-sm font-semibold text-gold">₹{c.cost || 0}</p>
+                  <p className={`text-xs ${c.status === 'completed' ? 'text-green-500' : 'text-muted'}`}>{c.status}</p>
                 </div>
               </Link>
             )

@@ -4,7 +4,7 @@ import { FiDollarSign, FiArrowUpRight } from 'react-icons/fi'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 import EmptyState from '../../components/common/EmptyState'
 import Pagination from '../../components/common/Pagination'
-import { format } from 'date-fns'
+import dayjs from 'dayjs'
 
 const EarningsPage = () => {
   const [earnings, setEarnings] = useState([])
@@ -29,11 +29,11 @@ const EarningsPage = () => {
     <div className="page-transition">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Earnings</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Your consultation earnings</p>
+          <h1 className="text-2xl font-bold text-light">Earnings</h1>
+          <p className="text-muted mt-1">Your consultation earnings</p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-gray-400">Total Earned</p>
+          <p className="text-xs text-muted">Total Earned</p>
           <p className="text-2xl font-bold text-green-500">₹{totalEarned.toLocaleString()}</p>
         </div>
       </div>
@@ -41,15 +41,15 @@ const EarningsPage = () => {
       {earnings.length === 0 ? (
         <EmptyState icon={FiDollarSign} title="No earnings yet" description="Start taking consultations to earn" />
       ) : (
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 divide-y divide-gray-100 dark:divide-gray-800">
+        <div className="bg-cosmic-2 rounded-2xl border border-white/5 divide-y divide-white/5">
           {earnings.map((e) => (
             <div key={e.id} className="flex items-center gap-4 p-4">
               <div className="w-10 h-10 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                 <FiArrowUpRight className="text-green-500" size={18} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-white">{e.description}</p>
-                <p className="text-xs text-gray-400">{format(new Date(e.createdAt), 'MMM dd, yyyy HH:mm')}</p>
+                <p className="text-sm font-medium text-light">{e.description}</p>
+                <p className="text-xs text-muted">{dayjs(e.createdAt).format('MMM dd, yyyy HH:mm')}</p>
               </div>
               <span className="text-sm font-semibold text-green-500">+₹{Math.abs(e.amount).toLocaleString()}</span>
             </div>

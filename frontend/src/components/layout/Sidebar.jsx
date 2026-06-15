@@ -28,7 +28,7 @@ const Sidebar = () => {
 
   return (
     <aside className="w-64 flex-shrink-0 hidden lg:block">
-      <div className="sticky top-20 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+      <div className="sticky top-20 bg-cosmic-2 rounded-2xl border border-white/5 p-4">
         <nav className="space-y-1">
           {links.map((link) => (
             <NavLink
@@ -37,8 +37,8 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    ? 'bg-gold/10 text-gold'
+                    : 'text-muted hover:bg-white/5 hover:text-light'
                 }`
               }
             >
