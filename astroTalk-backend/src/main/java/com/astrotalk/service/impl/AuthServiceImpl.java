@@ -8,6 +8,7 @@ import com.astrotalk.entity.User;
 import com.astrotalk.exception.DuplicateResourceException;
 import com.astrotalk.exception.EmailNotFoundException;
 import com.astrotalk.exception.InvalidCredentialsException;
+import com.astrotalk.exception.ResourceNotFoundException;
 import com.astrotalk.repository.AstrologerRepository;
 import com.astrotalk.repository.UserRepository;
 import com.astrotalk.service.AuthService;
@@ -19,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -181,5 +183,39 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void resetPassword(String token, String password, String confirmPassword) {
         log.info("Reset password with token");
+    }
+
+    @Override
+    public UserResponseModel getCurrentUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        return toUserResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponseModel updateProfile(String email, UpdateProfileRequestModel request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        if (request.getName() != null) user.setName(request.getName());
+        if (request.getPhone() != null) user.setPhone(request.getPhone());
+        if (request.getDateOfBirth() != null) user.setDateOfBirth(request.getDateOfBirth());
+        if (request.getPlaceOfBirth() != null) user.setPlaceOfBirth(request.getPlaceOfBirth());
+        if (request.getGender() != null) user.setGender(request.getGender());
+        if (request.getProfilePicture() != null) user.setProfilePicture(request.getProfilePicture());
+        user = userRepository.save(user);
+        return toUserResponse(user);
+    }
+
+    private UserResponseModel toUserResponse(User user) {
+        return UserResponseModel.builder()
+                .id(user.getId()).name(user.getName()).email(user.getEmail())
+                .phone(user.getPhone()).dateOfBirth(user.getDateOfBirth())
+                .timeOfBirth(user.getTimeOfBirth()).placeOfBirth(user.getPlaceOfBirth())
+                .latitude(user.getLatitude()).longitude(user.getLongitude())
+                .gender(user.getGender()).profilePicture(user.getProfilePicture())
+                .role(user.getRole()).emailVerified(user.isEmailVerified())
+                .active(user.isActive()).createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt()).build();
     }
 }

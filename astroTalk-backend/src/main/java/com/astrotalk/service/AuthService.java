@@ -17,4 +17,8 @@ public interface AuthService {
     void forgetPassword(String email);
 
     void resetPassword(String token, String password, String confirmPassword);
+
+    UserResponseModel getCurrentUser(String email);
+
+    UserResponseModel updateProfile(String email, UpdateProfileRequestModel request);
 }

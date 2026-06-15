@@ -23,7 +23,8 @@ public class WebResource {
     public static final String WS_ENDPOINT = "/ws";
 
     public static final String ID_PATH = "/{id}";
-    public static final String ASTRologer_PROFILE = "/profile";
+    public static final String ME = "/me";
+    public static final String PROFILE = "/profile";
     public static final String STATUS_TOGGLE = "/status/toggle";
     public static final String TOP = "/top";
     public static final String AVAILABILITY = "/{id}/availability";
@@ -40,6 +41,7 @@ public class WebResource {
     public static final String TRANSACTIONS = "/transactions";
     public static final String ADD = "/add";
     public static final String DASHBOARD = "/dashboard";
+    public static final String PENDING = "/pending";
     public static final String REVENUE = "/revenue";
     public static final String ADJUST = "/wallet/adjust";
     public static final String VERIFY_ASTROLOGER = "/astrologers/{id}/verify";

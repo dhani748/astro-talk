@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * REST controller for admin-only operations. Provides endpoints for dashboard
@@ -126,11 +127,43 @@ public class AdminController {
      * @param endDate   inclusive end date (ISO format)
      * @return {@link RevenueReportModel} with revenue breakdown
      */
+    @GetMapping(WebResource.ASTROLOGERS_ADMIN + WebResource.PENDING)
+    @Operation(summary = "Get pending astrologers", description = "Returns paginated list of unverified astrologers")
+    public ResponseEntity<Page<AstrologerResponseModel>> getPendingAstrologers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(adminService.getAllAstrologers(PageRequest.of(page, size), "PENDING"));
+    }
+
     @GetMapping(WebResource.REVENUE)
-    @Operation(summary = "Get revenue report", description = "Returns revenue data for a date range")
+    @Operation(summary = "Get revenue report", description = "Returns revenue data for a date range or by predefined range")
     public ResponseEntity<RevenueReportModel> getRevenueReport(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) String range) {
+        if (range != null) {
+            LocalDate now = LocalDate.now();
+            switch (range) {
+                case "daily":
+                    startDate = now;
+                    endDate = now;
+                    break;
+                case "weekly":
+                    startDate = now.minusDays(7);
+                    endDate = now;
+                    break;
+                case "monthly":
+                    startDate = now.minusDays(30);
+                    endDate = now;
+                    break;
+                case "yearly":
+                    startDate = now.minusDays(365);
+                    endDate = now;
+                    break;
+            }
+        }
+        if (startDate == null) startDate = LocalDate.now().minusDays(30);
+        if (endDate == null) endDate = LocalDate.now();
         return ResponseEntity.ok(adminService.getRevenueReport(startDate, endDate));
     }
 
