@@ -1,40 +1,44 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Toaster } from 'react-hot-toast'
 import { store } from './store'
 import { LanguageProvider } from './context/LanguageContext'
+import { SocketProvider } from './context/SocketContext'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Sidebar from './components/layout/Sidebar'
 import ProtectedRoute from './components/layout/ProtectedRoute'
 import RoleRoute from './components/layout/RoleRoute'
+import LoadingSpinner from './components/common/LoadingSpinner'
 
-import HomePage from './pages/public/HomePage'
-import AstrologerListPage from './pages/public/AstrologerListPage'
-import AstrologerProfilePage from './pages/public/AstrologerProfilePage'
-import LoginPage from './pages/public/LoginPage'
-import RegisterPage from './pages/public/RegisterPage'
+const LandingPage = lazy(() => import('./features/landing/pages/LandingPage'))
+const HomePage = lazy(() => import('./features/landing/pages/HomePage'))
+const AstrologerListPage = lazy(() => import('./features/astrologer/pages/AstrologerListPage'))
+const AstrologerProfilePage = lazy(() => import('./features/astrologer/pages/AstrologerProfilePage'))
+const LoginPage = lazy(() => import('./features/auth/pages/LoginPage'))
+const RegisterPage = lazy(() => import('./features/auth/pages/RegisterPage'))
 
-import DashboardPage from './pages/user/DashboardPage'
-import WalletPage from './pages/user/WalletPage'
-import ConsultationPage from './pages/user/ConsultationPage'
-import HistoryPage from './pages/user/HistoryPage'
-import ProfilePage from './pages/user/ProfilePage'
+const DashboardPage = lazy(() => import('./features/consultation/pages/DashboardPage'))
+const WalletPage = lazy(() => import('./features/wallet/pages/WalletPage'))
+const ConsultationPage = lazy(() => import('./features/consultation/pages/ConsultationPage'))
+const HistoryPage = lazy(() => import('./features/consultation/pages/HistoryPage'))
+const ProfilePage = lazy(() => import('./features/auth/pages/ProfilePage'))
 
-import AstrologerDashboardPage from './pages/astrologer/AstrologerDashboardPage'
-import AstrologerProfileEditPage from './pages/astrologer/AstrologerProfileEditPage'
-import EarningsPage from './pages/astrologer/EarningsPage'
+const AstrologerDashboardPage = lazy(() => import('./features/astrologer/pages/AstrologerDashboardPage'))
+const AstrologerProfileEditPage = lazy(() => import('./features/astrologer/pages/AstrologerProfileEditPage'))
+const EarningsPage = lazy(() => import('./features/astrologer/pages/EarningsPage'))
 
-import AdminDashboardPage from './pages/admin/AdminDashboardPage'
-import AdminUsersPage from './pages/admin/AdminUsersPage'
-import AdminAstrologersPage from './pages/admin/AdminAstrologersPage'
-import AdminRevenuePage from './pages/admin/AdminRevenuePage'
+const AdminDashboardPage = lazy(() => import('./features/admin/pages/AdminDashboardPage'))
+const AdminUsersPage = lazy(() => import('./features/admin/pages/AdminUsersPage'))
+const AdminAstrologersPage = lazy(() => import('./features/admin/pages/AdminAstrologersPage'))
+const AdminRevenuePage = lazy(() => import('./features/admin/pages/AdminRevenuePage'))
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'your-google-client-id.apps.googleusercontent.com'
 
 const PublicLayout = () => (
-  <div className="min-h-screen flex flex-col bg-gray-950 text-gray-100">
+  <div className="min-h-screen flex flex-col">
     <Navbar />
     <main className="flex-1">
       <Outlet />
@@ -44,7 +48,7 @@ const PublicLayout = () => (
 )
 
 const DashboardLayout = () => (
-  <div className="min-h-screen flex flex-col bg-gray-950">
+  <div className="min-h-screen flex flex-col">
     <Navbar />
     <div className="flex-1 flex max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 gap-8">
       <Sidebar />
@@ -56,7 +60,7 @@ const DashboardLayout = () => (
 )
 
 const ConsultationLayout = () => (
-  <div className="min-h-screen flex flex-col bg-gray-950">
+  <div className="min-h-screen flex flex-col">
     <Navbar />
     <main className="flex-1">
       <Outlet />
@@ -69,6 +73,7 @@ function App() {
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <Provider store={store}>
         <LanguageProvider>
+          <SocketProvider>
           <BrowserRouter>
             <Toaster
               position="top-right"
@@ -88,40 +93,44 @@ function App() {
                 },
               }}
             />
-            <Routes>
-              <Route element={<PublicLayout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/astrologers" element={<AstrologerListPage />} />
-                <Route path="/astrologers/:id" element={<AstrologerProfilePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-              </Route>
+            <Suspense fallback={<LoadingSpinner className="py-20" size="lg" />}>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route element={<PublicLayout />}>
+                  <Route path="/home" element={<HomePage />} />
+                  <Route path="/astrologers" element={<AstrologerListPage />} />
+                  <Route path="/astrologers/:id" element={<AstrologerProfilePage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                </Route>
 
-              <Route element={<ProtectedRoute><RoleRoute allowedRoles={['USER']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/wallet" element={<WalletPage />} />
-                <Route path="/history" element={<HistoryPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-              </Route>
+                <Route element={<ProtectedRoute><RoleRoute allowedRoles={['USER']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/wallet" element={<WalletPage />} />
+                  <Route path="/history" element={<HistoryPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                </Route>
 
-              <Route element={<ProtectedRoute><ConsultationLayout /></ProtectedRoute>}>
-                <Route path="/consultation/:id" element={<ConsultationPage />} />
-              </Route>
+                <Route element={<ProtectedRoute><ConsultationLayout /></ProtectedRoute>}>
+                  <Route path="/consultation/:id" element={<ConsultationPage />} />
+                </Route>
 
-              <Route element={<ProtectedRoute><RoleRoute allowedRoles={['ASTROLOGER']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
-                <Route path="/astrologer/dashboard" element={<AstrologerDashboardPage />} />
-                <Route path="/astrologer/profile" element={<AstrologerProfileEditPage />} />
-                <Route path="/astrologer/earnings" element={<EarningsPage />} />
-              </Route>
+                <Route element={<ProtectedRoute><RoleRoute allowedRoles={['ASTROLOGER']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
+                  <Route path="/astrologer/dashboard" element={<AstrologerDashboardPage />} />
+                  <Route path="/astrologer/profile" element={<AstrologerProfileEditPage />} />
+                  <Route path="/astrologer/earnings" element={<EarningsPage />} />
+                </Route>
 
-              <Route element={<ProtectedRoute><RoleRoute allowedRoles={['ADMIN']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
-                <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-                <Route path="/admin/users" element={<AdminUsersPage />} />
-                <Route path="/admin/astrologers" element={<AdminAstrologersPage />} />
-                <Route path="/admin/revenue" element={<AdminRevenuePage />} />
-              </Route>
-            </Routes>
+                <Route element={<ProtectedRoute><RoleRoute allowedRoles={['ADMIN']}><DashboardLayout /></RoleRoute></ProtectedRoute>}>
+                  <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+                  <Route path="/admin/users" element={<AdminUsersPage />} />
+                  <Route path="/admin/astrologers" element={<AdminAstrologersPage />} />
+                  <Route path="/admin/revenue" element={<AdminRevenuePage />} />
+                </Route>
+              </Routes>
+            </Suspense>
           </BrowserRouter>
+          </SocketProvider>
         </LanguageProvider>
       </Provider>
     </GoogleOAuthProvider>

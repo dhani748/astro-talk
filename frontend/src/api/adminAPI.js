@@ -12,5 +12,5 @@ export const verifyAstrologer = (id, status) =>
 export const getRevenueReport = (params) =>
   axiosInstance.get('/admin/revenue', { params })
 
-export const getPendingAstrologers = () =>
-  axiosInstance.get('/admin/astrologers/pending')
+export const getPendingAstrologers = (params) =>
+  axiosInstance.get('/admin/astrologers/pending', { params })

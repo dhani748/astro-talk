@@ -16,28 +16,28 @@ const AstrologerFilters = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Filters</h3>
+        <h3 className="font-semibold text-light">Filters</h3>
         <button
           onClick={() => dispatch(resetFilters())}
-          className="text-xs text-primary hover:underline"
+          className="text-xs text-gold hover:underline"
         >
           Reset All
         </button>
       </div>
 
       <div className="relative">
-        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
         <input
           type="text"
           placeholder="Search astrologers..."
           value={filters.search}
           onChange={(e) => handleFilterChange('search', e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30 placeholder:text-muted"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Specialization</label>
+        <label className="block text-sm font-medium text-muted mb-2">Specialization</label>
         <div className="flex flex-wrap gap-2">
           {specializations.map((spec) => (
             <button
@@ -45,8 +45,8 @@ const AstrologerFilters = () => {
               onClick={() => handleFilterChange('specialization', filters.specialization === spec ? '' : spec)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filters.specialization === spec
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gold text-cosmic'
+                  : 'bg-white/5 text-muted hover:bg-white/10'
               }`}
             >
               {spec}
@@ -56,7 +56,7 @@ const AstrologerFilters = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Language</label>
+        <label className="block text-sm font-medium text-muted mb-2">Language</label>
         <div className="flex flex-wrap gap-2">
           {languages.map((lang) => (
             <button
@@ -64,8 +64,8 @@ const AstrologerFilters = () => {
               onClick={() => handleFilterChange('language', filters.language === lang ? '' : lang)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filters.language === lang
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gold text-cosmic'
+                  : 'bg-white/5 text-muted hover:bg-white/10'
               }`}
             >
               {lang}
@@ -75,7 +75,7 @@ const AstrologerFilters = () => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-muted mb-2">
           Price Range: ₹{filters.minPrice} - ₹{filters.maxPrice}
         </label>
         <input
@@ -85,16 +85,16 @@ const AstrologerFilters = () => {
           step="10"
           value={filters.maxPrice}
           onChange={(e) => handleFilterChange('maxPrice', parseInt(e.target.value))}
-          className="w-full accent-primary"
+          className="w-full accent-gold"
         />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
+        <div className="flex justify-between text-xs text-muted mt-1">
           <span>₹0</span>
           <span>₹1000</span>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-muted mb-2">
           Minimum Rating: {filters.rating}
         </label>
         <input
@@ -104,9 +104,9 @@ const AstrologerFilters = () => {
           step="0.5"
           value={filters.rating}
           onChange={(e) => handleFilterChange('rating', parseFloat(e.target.value))}
-          className="w-full accent-primary"
+          className="w-full accent-gold"
         />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
+        <div className="flex justify-between text-xs text-muted mt-1">
           <span>0</span>
           <span>5</span>
         </div>
@@ -117,9 +117,9 @@ const AstrologerFilters = () => {
           type="checkbox"
           checked={filters.onlineOnly}
           onChange={(e) => handleFilterChange('onlineOnly', e.target.checked)}
-          className="w-4 h-4 rounded accent-primary"
+          className="w-4 h-4 rounded accent-gold"
         />
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Online Only</span>
+        <span className="text-sm font-medium text-muted">Online Only</span>
       </label>
     </div>
   )

@@ -26,13 +26,13 @@ const AdminUsersPage = () => {
   return (
     <div className="page-transition">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Users</h1>
+        <h1 className="text-2xl font-bold text-light">Users</h1>
         <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
           <input
             type="text" placeholder="Search users..."
             value={search} onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-            className="pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 w-64"
+            className="pl-10 pr-4 py-2 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30 w-64"
           />
         </div>
       </div>
@@ -42,28 +42,28 @@ const AdminUsersPage = () => {
       ) : users.length === 0 ? (
         <EmptyState icon={FiUsers} title="No users found" />
       ) : (
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+        <div className="bg-cosmic-2 rounded-2xl border border-white/5 overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-100 dark:border-gray-800">
-                <th className="text-left p-4 text-sm font-medium text-gray-500 dark:text-gray-400">Name</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500 dark:text-gray-400">Email</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500 dark:text-gray-400">Phone</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500 dark:text-gray-400">Role</th>
-                <th className="text-left p-4 text-sm font-medium text-gray-500 dark:text-gray-400">Joined</th>
+              <tr className="border-b border-white/5">
+                <th className="text-left p-4 text-sm font-medium text-muted">Name</th>
+                <th className="text-left p-4 text-sm font-medium text-muted">Email</th>
+                <th className="text-left p-4 text-sm font-medium text-muted">Phone</th>
+                <th className="text-left p-4 text-sm font-medium text-muted">Role</th>
+                <th className="text-left p-4 text-sm font-medium text-muted">Joined</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+            <tbody className="divide-y divide-white/5">
               {users.map((u) => (
-                <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                <tr key={u.id} className="hover:bg-white/5 transition-colors">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <img src={u.profilePhoto || `https://ui-avatars.com/api/?name=${u.name}&background=6B21A8&color=fff&size=32`} alt="" className="w-8 h-8 rounded-lg object-cover" />
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{u.name}</span>
+                      <span className="text-sm font-medium text-light">{u.name}</span>
                     </div>
                   </td>
-                  <td className="p-4 text-sm text-gray-600 dark:text-gray-400">{u.email}</td>
-                  <td className="p-4 text-sm text-gray-600 dark:text-gray-400">{u.phone || '-'}</td>
+                  <td className="p-4 text-sm text-muted">{u.email}</td>
+                  <td className="p-4 text-sm text-muted">{u.phone || '-'}</td>
                   <td className="p-4">
                     <span className={`px-2 py-1 rounded-lg text-xs font-medium capitalize ${
                       u.role === 'admin' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
@@ -73,7 +73,7 @@ const AdminUsersPage = () => {
                       {u.role}
                     </span>
                   </td>
-                  <td className="p-4 text-sm text-gray-600 dark:text-gray-400">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
+                  <td className="p-4 text-sm text-muted">{u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-'}</td>
                 </tr>
               ))}
             </tbody>

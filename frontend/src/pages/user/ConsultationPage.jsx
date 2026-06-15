@@ -4,8 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getConsultationById, endConsultation } from '../../api/consultationAPI'
 import { getChatHistory } from '../../api/chatAPI'
 import { setActiveConsultation, updateConsultationStatus, addMessage } from '../../store/consultationSlice'
-import useWebSocket from '../../hooks/useWebSocket'
-import useWebRTC from '../../hooks/useWebRTC'
+import { useSocket } from '../../context/SocketContext'
 import ChatWindow from '../../components/consultation/ChatWindow'
 import VideoCallUI from '../../components/consultation/VideoCallUI'
 import VoiceCallUI from '../../components/consultation/VoiceCallUI'
@@ -34,8 +33,12 @@ const ConsultationPage = () => {
   const [speakerOn, setSpeakerOn] = useState(false)
   const typingTimeout = useRef(null)
 
-  const { sendMessage, sendTyping } = useWebSocket(id)
-  const { localStream, remoteStream, callStatus, initiateCall, answerCall, endCall } = useWebRTC(sendMessage)
+  const { subscribeToConsultation, unsubscribeAll, sendMessage, sendTyping, localStream, remoteStream, callStatus, initiateCall, endCall } = useSocket()
+
+  useEffect(() => {
+    subscribeToConsultation(id)
+    return () => unsubscribeAll()
+  }, [id])
 
   useEffect(() => {
     const fetchConsultation = async () => {
@@ -96,7 +99,7 @@ const ConsultationPage = () => {
 
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col page-transition">
-      <div className="flex items-center justify-between px-6 py-3 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+      <div className="flex items-center justify-between px-6 py-3 bg-cosmic-2 border-b border-white/5">
         <div className="flex items-center gap-3">
           <img
             src={consultation?.astrologerPhoto || `https://ui-avatars.com/api/?name=${consultation?.astrologerName || 'A'}&background=6B21A8&color=fff&size=40`}
@@ -104,17 +107,17 @@ const ConsultationPage = () => {
             className="w-10 h-10 rounded-lg object-cover"
           />
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{consultation?.astrologerName || 'Astrologer'}</h3>
-            <p className="text-xs text-gray-400 capitalize">{consultationType} consultation</p>
+            <h3 className="font-semibold text-light text-sm">{consultation?.astrologerName || 'Astrologer'}</h3>
+            <p className="text-xs text-muted capitalize">{consultationType} consultation</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <BalanceWarning balance={balance} />
           {consultationType === 'chat' && (
-            <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl">
-              <button className="p-2 bg-white dark:bg-gray-700 rounded-lg shadow-sm"><FiMessageCircle size={16} className="text-primary" /></button>
-              <button onClick={() => { setConsultationType('audio'); initiateCall(id, 'audio') }} className="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700"><FiPhone size={16} className="text-gray-400" /></button>
-              <button onClick={() => { setConsultationType('video'); initiateCall(id, 'video') }} className="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700"><FiVideo size={16} className="text-gray-400" /></button>
+            <div className="flex gap-1 p-1 bg-white/5 rounded-xl">
+              <button className="p-2 bg-cosmic-3 rounded-lg shadow-sm"><FiMessageCircle size={16} className="text-gold" /></button>
+              <button onClick={() => { setConsultationType('audio'); initiateCall(id, 'audio') }} className="p-2 rounded-lg hover:bg-white/10"><FiPhone size={16} className="text-muted" /></button>
+              <button onClick={() => { setConsultationType('video'); initiateCall(id, 'video') }} className="p-2 rounded-lg hover:bg-white/10"><FiVideo size={16} className="text-muted" /></button>
             </div>
           )}
           <button onClick={() => setShowEndModal(true)} className="px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-medium hover:bg-red-600 transition-colors">
@@ -155,9 +158,9 @@ const ConsultationPage = () => {
       </div>
 
       <Modal isOpen={showEndModal} onClose={() => setShowEndModal(false)} title="End Consultation" size="sm">
-        <p className="text-gray-600 dark:text-gray-400 mb-6">Are you sure you want to end this consultation?</p>
+        <p className="text-muted mb-6">Are you sure you want to end this consultation?</p>
         <div className="flex gap-3 justify-end">
-          <button onClick={() => setShowEndModal(false)} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <button onClick={() => setShowEndModal(false)} className="px-4 py-2 rounded-lg border border-white/10 text-light hover:bg-white/5 transition-colors">
             Cancel
           </button>
           <button onClick={handleEndConsultation} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">

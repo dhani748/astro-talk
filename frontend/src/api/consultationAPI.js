@@ -4,7 +4,7 @@ export const startConsultation = (data) =>
   axiosInstance.post('/consultations/start', data)
 
 export const endConsultation = (id) =>
-  axiosInstance.post(`/consultations/${id}/end`)
+  axiosInstance.post(`/consultations/end/${id}`)
 
 export const getConsultationHistory = (params) =>
   axiosInstance.get('/consultations/history', { params })

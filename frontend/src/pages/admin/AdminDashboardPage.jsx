@@ -31,22 +31,22 @@ const AdminDashboardPage = () => {
 
   return (
     <div className="page-transition">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold text-light mb-6">Admin Dashboard</h1>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {statCards.map((stat, i) => (
-          <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800">
+          <div key={i} className="bg-cosmic-2 rounded-2xl p-5 border border-white/5">
             <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-3`}>
               <stat.icon className={stat.color} size={20} />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-white mt-0.5">{stat.value}</p>
+            <p className="text-xs text-muted">{stat.label}</p>
+            <p className="text-xl font-bold text-light mt-0.5">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800">
-        <h2 className="font-semibold text-gray-900 dark:text-white mb-6">Revenue (This Week)</h2>
+      <div className="bg-cosmic-2 rounded-2xl p-6 border border-white/5">
+        <h2 className="font-semibold text-light mb-6">Revenue (This Week)</h2>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>

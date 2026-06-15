@@ -49,7 +49,7 @@ const RazorpayButton = ({ amount, onSuccess }) => {
     <button
       onClick={handlePayment}
       disabled={loading}
-      className="flex items-center gap-2 px-6 py-3 bg-gold text-gray-900 rounded-xl font-semibold hover:bg-gold-dark transition-colors disabled:opacity-50 text-sm"
+      className="flex items-center gap-2 px-6 py-3 bg-gold text-cosmic rounded-xl font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
     >
       {loading ? 'Processing...' : `Pay ₹${amount}`}
     </button>

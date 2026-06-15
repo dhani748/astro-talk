@@ -18,9 +18,9 @@ const CallTimer = ({ startTime }) => {
   }
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
+    <div className="flex items-center gap-2 px-4 py-2 bg-gold/10 rounded-full">
       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-      <span className="text-sm font-mono font-semibold text-primary">{formatTime(elapsed)}</span>
+      <span className="text-sm font-mono font-semibold text-gold">{formatTime(elapsed)}</span>
     </div>
   )
 }

@@ -40,25 +40,25 @@ const AdminAstrologersPage = () => {
 
   return (
     <div className="page-transition">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Pending Verifications</h1>
+      <h1 className="text-2xl font-bold text-light mb-6">Pending Verifications</h1>
 
       {astrologers.length === 0 ? (
         <EmptyState icon={FiStar} title="No pending verifications" description="All astrologers have been reviewed" />
       ) : (
         <div className="space-y-4">
           {astrologers.map((a) => (
-            <div key={a.id} className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800">
+            <div key={a.id} className="bg-cosmic-2 rounded-2xl p-6 border border-white/5">
               <div className="flex items-start gap-4">
                 <img src={a.profilePhoto || `https://ui-avatars.com/api/?name=${a.name}&background=6B21A8&color=fff&size=56`} alt="" className="w-14 h-14 rounded-xl object-cover" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{a.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{a.specialization}</p>
-                  <p className="text-sm text-gray-400 mt-1">{a.email} | {a.phone}</p>
+                  <h3 className="font-semibold text-light">{a.name}</h3>
+                  <p className="text-sm text-muted">{a.specialization}</p>
+                  <p className="text-sm text-muted mt-1">{a.email} | {a.phone}</p>
                   <div className="flex items-center gap-2 mt-2">
                     <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-2 py-0.5 rounded-full">Pending</span>
-                    <span className="text-xs text-gray-400">Experience: {a.experience || 'NA'} yrs</span>
+                    <span className="text-xs text-muted">Experience: {a.experience || 'NA'} yrs</span>
                   </div>
-                  {a.bio && <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">{a.bio}</p>}
+                  {a.bio && <p className="text-sm text-muted mt-2 line-clamp-2">{a.bio}</p>}
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleVerify(a.id, 'verified')} disabled={actionLoading === a.id}

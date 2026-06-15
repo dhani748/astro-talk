@@ -52,37 +52,37 @@ const AstrologerProfileEditPage = () => {
 
   return (
     <div className="max-w-2xl page-transition">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Edit Astrologer Profile</h1>
+      <h1 className="text-2xl font-bold text-light mb-6">Edit Astrologer Profile</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-8 space-y-6">
+      <form onSubmit={handleSubmit} className="bg-cosmic-2 rounded-2xl border border-white/5 p-8 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Bio</label>
+          <label className="block text-sm font-medium text-light mb-1.5">Bio</label>
           <textarea
             name="bio" value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })}
             rows={4} placeholder="Write about yourself, your experience, and expertise..."
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Experience (years)</label>
+            <label className="block text-sm font-medium text-light mb-1.5">Experience (years)</label>
             <input type="number" min={0} max={50} value={form.experience} onChange={(e) => setForm({ ...form, experience: Number(e.target.value) })}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Price per Minute (₹)</label>
+            <label className="block text-sm font-medium text-light mb-1.5">Price per Minute (₹)</label>
             <input type="number" min={1} max={1000} value={form.pricePerMin} onChange={(e) => setForm({ ...form, pricePerMin: Number(e.target.value) })}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Specializations</label>
+          <label className="block text-sm font-medium text-light mb-2">Specializations</label>
           <div className="flex flex-wrap gap-2">
             {specializations.map((spec) => (
               <button key={spec} type="button" onClick={() => setForm({ ...form, specializations: toggleArray(form.specializations, spec) })}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${form.specializations.includes(spec) ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${form.specializations.includes(spec) ? 'bg-gold text-cosmic' : 'bg-white/5 text-muted hover:bg-white/10'}`}>
                 {spec}
               </button>
             ))}
@@ -90,11 +90,11 @@ const AstrologerProfileEditPage = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Languages</label>
+          <label className="block text-sm font-medium text-light mb-2">Languages</label>
           <div className="flex flex-wrap gap-2">
             {languages.map((lang) => (
               <button key={lang} type="button" onClick={() => setForm({ ...form, languages: toggleArray(form.languages, lang) })}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${form.languages.includes(lang) ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${form.languages.includes(lang) ? 'bg-gold text-cosmic' : 'bg-white/5 text-muted hover:bg-white/10'}`}>
                 {lang}
               </button>
             ))}
@@ -102,14 +102,14 @@ const AstrologerProfileEditPage = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Profile Photo URL</label>
+          <label className="block text-sm font-medium text-light mb-1.5">Profile Photo URL</label>
           <input type="url" value={form.profilePhoto} onChange={(e) => setForm({ ...form, profilePhoto: e.target.value })}
             placeholder="https://example.com/photo.jpg"
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            className="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-cosmic-3 text-light text-sm focus:outline-none focus:ring-2 focus:ring-gold/30" />
         </div>
 
         <button type="submit" disabled={saving}
-          className="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary-dark transition-colors disabled:opacity-50">
+          className="px-6 py-2.5 bg-gold text-cosmic rounded-xl font-medium hover:opacity-90 transition-colors disabled:opacity-50">
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </form>
