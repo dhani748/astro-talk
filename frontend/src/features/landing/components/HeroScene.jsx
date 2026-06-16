@@ -113,10 +113,23 @@ function OrbitingRing() {
   )
 }
 
+function handleContextLost(event) {
+  event.preventDefault()
+}
+
 export default function HeroScene() {
   return (
     <div className="absolute inset-0 -z-10">
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+      <Canvas
+        camera={{ position: [0, 0, 8], fov: 45 }}
+        gl={{
+          powerPreference: 'high-performance',
+          failIfMajorPerformanceCaveat: false,
+        }}
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener('webglcontextlost', handleContextLost)
+        }}
+      >
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
         <pointLight position={[-5, -5, 2]} intensity={0.5} color="#6B21A8" />

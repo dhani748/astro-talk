@@ -239,6 +239,10 @@ function Scene() {
   )
 }
 
+function handleContextLost(event) {
+  event.preventDefault()
+}
+
 export default function ZodiacWheel() {
   return (
     <Canvas
@@ -250,8 +254,13 @@ export default function ZodiacWheel() {
       }}
       gl={{
         antialias: true,
+        powerPreference: 'high-performance',
+        failIfMajorPerformanceCaveat: false,
         toneMapping: THREE.ACESFilmicToneMapping,
         toneMappingExposure: 1.2,
+      }}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener('webglcontextlost', handleContextLost)
       }}
     >
       <ambientLight intensity={0.1} />
