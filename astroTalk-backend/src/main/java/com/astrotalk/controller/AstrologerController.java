@@ -124,7 +124,7 @@ public class AstrologerController {
      * @param request        the profile fields to update
      * @return the updated {@link AstrologerResponse}
      */
-    @PutMapping(WebResource.ASTRologer_PROFILE)
+    @PutMapping(WebResource.PROFILE)
     @Operation(summary = "Update astrologer profile", description = "Updates the authenticated astrologer's profile")
     public ResponseEntity<AstrologerResponseModel> updateProfile(
             Authentication authentication,

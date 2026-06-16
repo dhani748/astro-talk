@@ -120,6 +120,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ConsultationResponseModel getActiveConsultation(Long userId) {
         Consultation consultation = consultationRepository
                 .findByUserIdAndStatus(userId, ConsultationStatus.ACTIVE)
@@ -129,12 +130,14 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ConsultationResponseModel> getConsultationHistory(Long userId, Pageable pageable) {
         return consultationRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
                 .map(this::toConsultationResponse);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ConsultationResponseModel getConsultationById(Long id) {
         Consultation consultation = consultationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Consultation", id));

@@ -7,6 +7,8 @@ import com.astrotalk.model.LoginRequestModel;
 import com.astrotalk.model.RefreshTokenModel;
 import com.astrotalk.model.RegisterAstrologerRequestModel;
 import com.astrotalk.model.RegisterRequestModel;
+import com.astrotalk.model.UpdateProfileRequestModel;
+import com.astrotalk.model.UserResponseModel;
 import com.astrotalk.service.AuthService;
 import com.astrotalk.service.GoogleAuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -81,5 +84,19 @@ public class AuthController {
     @Operation(summary = "Google Sign-In", description = "Authenticates via Google ID token")
     public ResponseEntity<AuthResponseModel> googleLogin(@Valid @RequestBody GoogleLoginRequestModel request) {
         return ResponseEntity.ok(googleAuthService.authenticate(request));
+    }
+
+    @GetMapping(WebResource.ME)
+    @Operation(summary = "Get current user", description = "Returns the authenticated user's profile")
+    public ResponseEntity<UserResponseModel> getCurrentUser(Authentication authentication) {
+        return ResponseEntity.ok(authService.getCurrentUser(authentication.getName()));
+    }
+
+    @PutMapping(WebResource.PROFILE)
+    @Operation(summary = "Update profile", description = "Updates the authenticated user's profile")
+    public ResponseEntity<UserResponseModel> updateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UpdateProfileRequestModel request) {
+        return ResponseEntity.ok(authService.updateProfile(authentication.getName(), request));
     }
 }

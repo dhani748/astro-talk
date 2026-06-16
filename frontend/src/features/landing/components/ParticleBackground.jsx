@@ -83,13 +83,24 @@ function ParticleField() {
   )
 }
 
+function handleContextLost(event) {
+  event.preventDefault()
+}
+
 export default function ParticleBackground() {
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: -1 }}>
       <Canvas
         camera={{ position: [0, 0, 15], fov: 60 }}
-        gl={{ antialias: true }}
+        gl={{
+          antialias: true,
+          powerPreference: 'high-performance',
+          failIfMajorPerformanceCaveat: false,
+        }}
         style={{ width: '100%', height: '100%' }}
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener('webglcontextlost', handleContextLost)
+        }}
       >
         <ParticleField />
       </Canvas>
